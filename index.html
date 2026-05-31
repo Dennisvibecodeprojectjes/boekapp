@@ -535,76 +535,114 @@
     }
 
     // --- Google Books API ISBN Zoeker ---
-    function fetchBookDetailsByISBN() {
-      const isbnInput = document.getElementById('formIsbn');
-      const isbn = isbnInput.value.trim().replace(/[-\s]/g, '');
-      const feedback = document.getElementById('isbnFeedback');
-      const searchBtn = document.getElementById('isbnSearchBtn');
+    // --- ISBN Zoeker met Dual-Search (Google Books & Open Library Fallback) ---
+function fetchBookDetailsByISBN() {
+  const isbnInput = document.getElementById('formIsbn');
+  
+  // Strip ALLES behalve cijfers en de letter X/x (voor 10-cijferige ISBN's)
+  const isbn = isbnInput.value.trim().replace(/[^0-9Xx]/g, '');
+  const feedback = document.getElementById('isbnFeedback');
+  const searchBtn = document.getElementById('isbnSearchBtn');
 
-      if (!isbn) {
-        showIsbnFeedback("Vul eerst een ISBN in.", "text-amber-500");
+  if (!isbn) {
+    showIsbnFeedback("Vul een geldig ISBN-nummer in.", "text-amber-500");
+    return;
+  }
+
+  searchBtn.disabled = true;
+  searchBtn.innerText = "Zoeken...";
+  showIsbnFeedback("Gegevens ophalen via Google...", "text-stone-400");
+
+  // 1. Probeer eerst Google Books API
+  fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+    .then(response => {
+      if (!response.ok) throw new Error("Google Books HTTP Fout");
+      return response.json();
+    })
+    .then(data => {
+      if (data.totalItems === 0 || !data.items) {
+        // Google Books heeft geen resultaten, schakel over naar Open Library
+        console.warn("Geen resultaat bij Google. Overschakelen naar Open Library...");
+        fetchFromOpenLibrary(isbn);
         return;
       }
 
-      searchBtn.disabled = true;
-      searchBtn.innerText = "Zoeken...";
-      showIsbnFeedback("Boekgegevens ophalen...", "text-stone-400");
+      const volumeInfo = data.items[0].volumeInfo;
+      
+      populateFormFields({
+        title: volumeInfo.title || '',
+        author: volumeInfo.authors ? volumeInfo.authors.join(', ') : '',
+        pages: volumeInfo.pageCount || '',
+        cover: volumeInfo.imageLinks ? (volumeInfo.imageLinks.thumbnail || volumeInfo.imageLinks.smallThumbnail || '') : '',
+        genre: volumeInfo.categories ? volumeInfo.categories[0] : ''
+      });
+      showIsbnFeedback("Gegevens geladen via Google Books!", "text-emerald-500");
+    })
+    .catch(error => {
+      // Netwerkfout (bv. adblocker blokkeert Google). Schakel over naar Open Library
+      console.warn("Google Books geblokkeerd of mislukt. Overschakelen naar Open Library...", error);
+      fetchFromOpenLibrary(isbn);
+    })
+    .finally(() => {
+      searchBtn.disabled = false;
+      searchBtn.innerText = "Zoek Boek";
+    });
+}
 
-      fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
-        .then(response => {
-          if (!response.ok) throw new Error("API-fout");
-          return response.json();
-        })
-        .then(data => {
-          if (data.totalItems === 0 || !data.items) {
-            showIsbnFeedback("Geen boek gevonden. Vul de velden handmatig in.", "text-amber-500");
-            return;
-          }
+// 2. Open Library Fallback (Adblocker-proof en open-source)
+function fetchFromOpenLibrary(isbn) {
+  showIsbnFeedback("Gegevens ophalen via Open Library...", "text-stone-400");
 
-          const volumeInfo = data.items[0].volumeInfo;
+  fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`)
+    .then(res => {
+      if (!res.ok) throw new Error("Open Library HTTP Fout");
+      return res.json();
+    })
+    .then(data => {
+      const key = `ISBN:${isbn}`;
+      if (!data[key]) {
+        showIsbnFeedback("Boek niet gevonden in beide databases. Vul handmatig in.", "text-amber-500");
+        return;
+      }
 
-          document.getElementById('formTitle').value = volumeInfo.title || '';
-          document.getElementById('formAuthor').value = volumeInfo.authors ? volumeInfo.authors.join(', ') : '';
-          document.getElementById('formPages').value = volumeInfo.pageCount || '';
+      const bookInfo = data[key];
+      const authorNames = bookInfo.authors ? bookInfo.authors.map(a => a.name).join(', ') : '';
+      let coverUrl = bookInfo.cover ? (bookInfo.cover.large || bookInfo.cover.medium || '') : '';
+      coverUrl = coverUrl.replace(/^http:/i, 'https:'); // Forceer HTTPS
+      const genreName = bookInfo.subjects ? bookInfo.subjects[0].name : '';
 
-          let coverUrl = '';
-          if (volumeInfo.imageLinks) {
-            coverUrl = volumeInfo.imageLinks.thumbnail || volumeInfo.imageLinks.smallThumbnail || '';
-            coverUrl = coverUrl.replace(/^http:/i, 'https:');
-          }
-          document.getElementById('formCoverUrl').value = coverUrl;
+      populateFormFields({
+        title: bookInfo.title || '',
+        author: authorNames,
+        pages: bookInfo.number_of_pages || '',
+        cover: coverUrl,
+        genre: genreName
+      });
+      showIsbnFeedback("Gegevens geladen via Open Library!", "text-emerald-500");
+    })
+    .catch(err => {
+      console.error(err);
+      showIsbnFeedback("Fout bij ophalen via beide databases. Vul handmatig in.", "text-red-500");
+    });
+}
 
-          const previewContainer = document.getElementById('coverPreviewContainer');
-          const previewImg = document.getElementById('coverPreviewImg');
-          if (coverUrl) {
-            previewImg.src = coverUrl;
-            previewContainer.classList.remove('hidden');
-          } else {
-            previewContainer.classList.add('hidden');
-          }
+// 3. Helper om formuliervelden netjes te vullen
+function populateFormFields(data) {
+  document.getElementById('formTitle').value = data.title;
+  document.getElementById('formAuthor').value = data.author;
+  document.getElementById('formPages').value = data.pages;
+  document.getElementById('formCoverUrl').value = data.cover;
+  document.getElementById('formGenre').value = data.genre || '';
 
-          if (volumeInfo.categories && volumeInfo.categories.length > 0) {
-            document.getElementById('formGenre').value = volumeInfo.categories[0];
-          }
-
-          showIsbnFeedback("Gegevens geladen!", "text-emerald-500");
-        })
-        .catch(error => {
-          console.error(error);
-          showIsbnFeedback("Fout bij ophalen. Probeer het opnieuw.", "text-red-500");
-        })
-        .finally(() => {
-          searchBtn.disabled = false;
-          searchBtn.innerText = "Zoek Boek";
-        });
-    }
-
-    function showIsbnFeedback(message, colorClass) {
-      const feedback = document.getElementById('isbnFeedback');
-      feedback.className = `text-[11px] ${colorClass}`;
-      feedback.innerText = message;
-      feedback.classList.remove('hidden');
-    }
+  const previewContainer = document.getElementById('coverPreviewContainer');
+  const previewImg = document.getElementById('coverPreviewImg');
+  if (data.cover) {
+    previewImg.src = data.cover;
+    previewContainer.classList.remove('hidden');
+  } else {
+    previewContainer.classList.add('hidden');
+  }
+}
 
     // --- Boek Toevoegen Opslaan (POST) ---
     function handleFormSubmit(event) {
