@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="nl" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,12 +16,12 @@
         extend: {
           colors: {
             cafe: {
-              900: '#1c1917', // Dark Espresso background
-              800: '#292524', // Card Background
-              700: '#44403c', // Warm Slate
-              accent: '#d97706', // Soft Amber
-              cream: '#f5f5f4',  // Parchment white
-              wood: '#78350f'    // Shelving Brown
+              900: '#1c1917', // Espresso zwart
+              800: '#292524', // Kaarthouder achtergrond
+              700: '#44403c', // Warm Slate randen
+              accent: '#d97706', // Zachte amber tint
+              cream: '#f5f5f4',  // Perkament wit
+              wood: '#78350f'    // Boekenkast hout
             }
           }
         }
@@ -29,7 +29,6 @@
     }
   </script>
   <style>
-    /* Styling for the wooden bookshelf effect */
     .wood-shelf {
       background: linear-gradient(0deg, #451a03 0%, #78350f 100%);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), inset 0 2px 4px 0 rgba(255, 255, 255, 0.1);
@@ -51,13 +50,22 @@
       <h1 class="text-xl font-bold tracking-tight text-cafe-accent">Book Cafe</h1>
     </div>
     <button onclick="toggleModal('addBookModal', true)" class="bg-cafe-accent hover:bg-amber-700 text-cafe-900 font-semibold px-4 py-2 rounded-lg text-sm transition-all shadow-md">
-      + Add Book
+      + Boek Toevoegen
     </button>
   </header>
 
   <main class="max-w-4xl mx-auto px-4 py-6 space-y-10">
 
-    <!-- 1. On This Day Time Machine Section -->
+    <!-- Challenge Doelstelling -->
+    <div class="bg-cafe-800/40 border border-cafe-700/50 p-4 rounded-xl flex justify-between items-center">
+      <div>
+        <h3 class="text-sm font-bold text-cafe-accent">Challenge Target</h3>
+        <p id="challengeText" class="text-xs text-stone-400">Jaardoel wordt geladen...</p>
+      </div>
+      <span class="text-2xl">🏆</span>
+    </div>
+
+    <!-- 1. On This Day Time Machine Sectie -->
     <section id="timeMachineSection" class="hidden">
       <div class="bg-gradient-to-r from-amber-950/40 to-cafe-800 border border-cafe-accent/30 rounded-xl p-5 shadow-lg relative overflow-hidden">
         <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">⏳</div>
@@ -68,39 +76,38 @@
       </div>
     </section>
 
-    <!-- 3. Monthly Curated Shelf Section -->
+    <!-- 3. Monthly Curated Shelf Sectie -->
     <section class="space-y-3">
       <div>
-        <h2 class="text-xl font-bold tracking-tight">Monthly Curated Shelf</h2>
-        <p class="text-xs text-stone-400">Hand-selected books on the table this month</p>
+        <h2 class="text-xl font-bold tracking-tight">Maandelijkse TBR-Kast</h2>
+        <p class="text-xs text-stone-400">Boeken op je TBR voor deze maand (gefilterd uit 'TBR Lijst')</p>
       </div>
-      <!-- Wooden Shelf Container -->
+      <!-- Houten Plank -->
       <div class="relative pt-12 pb-2 px-6 rounded-xl bg-stone-950/60 border border-stone-800/80 shadow-inner">
         <div id="curatedShelf" class="grid grid-cols-4 gap-4 h-44 items-end relative z-10">
           <!-- Dynamically populated with 4 cozy book-spine items -->
         </div>
-        <!-- Wooden ledge -->
         <div class="wood-shelf h-5 w-full rounded-md mt-1"></div>
       </div>
     </section>
 
-    <!-- 5. Series Progress Tracker Section -->
+    <!-- 5. Series Tracker Sectie -->
     <section class="space-y-4">
       <div>
-        <h2 class="text-xl font-bold tracking-tight">Active Series</h2>
-        <p class="text-xs text-stone-400">Keep up with sequence orders</p>
+        <h2 class="text-xl font-bold tracking-tight">Actieve Series</h2>
+        <p class="text-xs text-stone-400">Voortgang en volgorde van je lopende series</p>
       </div>
       <div id="seriesView" class="grid gap-4 md:grid-cols-2">
         <!-- Dynamically populated -->
       </div>
     </section>
 
-    <!-- 2. Book Wrapped Stats Page -->
+    <!-- 2. Book Wrapped Stats -->
     <section class="bg-cafe-800/60 border border-cafe-700/60 rounded-xl p-6 space-y-6">
       <div class="flex justify-between items-center border-b border-cafe-700 pb-4">
         <div>
           <h2 class="text-xl font-bold tracking-tight text-cafe-accent">Book Wrapped</h2>
-          <p class="text-xs text-stone-400">Historical performance breakdown</p>
+          <p class="text-xs text-stone-400">Je statistieken per jaar</p>
         </div>
         <select id="wrappedYearSelect" onchange="renderStats()" class="bg-cafe-900 border border-cafe-700 text-cafe-cream rounded-md px-3 py-1.5 text-sm focus:ring-1 focus:ring-cafe-accent">
           <option value="2026" selected>2026</option>
@@ -109,19 +116,19 @@
         </select>
       </div>
 
-      <!-- Quick Metrics Grid -->
+      <!-- Statistieken Grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-cafe-900/60 p-4 rounded-lg border border-cafe-700 text-center">
           <div class="text-2xl font-bold text-cafe-accent" id="statTotalBooks">0</div>
-          <div class="text-[10px] uppercase tracking-wider text-stone-400 mt-1">Total Books</div>
+          <div class="text-[10px] uppercase tracking-wider text-stone-400 mt-1">Boeken Gelezen</div>
         </div>
         <div class="bg-cafe-900/60 p-4 rounded-lg border border-cafe-700 text-center">
           <div class="text-2xl font-bold text-cafe-accent" id="statTotalPages">0</div>
-          <div class="text-[10px] uppercase tracking-wider text-stone-400 mt-1">Pages Read</div>
+          <div class="text-[10px] uppercase tracking-wider text-stone-400 mt-1">Pagina's Gelezen</div>
         </div>
         <div class="bg-cafe-900/60 p-4 rounded-lg border border-cafe-700 text-center">
           <div class="text-2xl font-bold text-cafe-accent" id="statAvgRating">0.0</div>
-          <div class="text-[10px] uppercase tracking-wider text-stone-400 mt-1">Avg Rating</div>
+          <div class="text-[10px] uppercase tracking-wider text-stone-400 mt-1">Gem. Rating</div>
         </div>
         <div class="bg-cafe-900/60 p-4 rounded-lg border border-cafe-700 text-center">
           <div class="text-lg font-bold text-cafe-accent truncate" id="statTopGenre">-</div>
@@ -129,7 +136,7 @@
         </div>
       </div>
 
-      <!-- Charts Section -->
+      <!-- Maandelijkse trendgrafiek -->
       <div class="h-64 mt-4 relative">
         <canvas id="wrappedChart"></canvas>
       </div>
@@ -137,165 +144,190 @@
 
   </main>
 
-  <!-- Navigation Menu for Mobile Comfort -->
+  <!-- Mobiele Navigatiebalk -->
   <nav class="fixed bottom-0 left-0 right-0 border-t border-cafe-700 bg-cafe-800/90 backdrop-blur py-3 flex justify-around items-center z-40 text-xs">
     <button class="flex flex-col items-center space-y-1 text-cafe-accent"><span>🏠</span><span>Home</span></button>
-    <button onclick="toggleModal('addBookModal', true)" class="flex flex-col items-center space-y-1 text-stone-400 hover:text-cafe-cream"><span>➕</span><span>Add Book</span></button>
+    <button onclick="toggleModal('addBookModal', true)" class="flex flex-col items-center space-y-1 text-stone-400 hover:text-cafe-cream"><span>➕</span><span>Nieuw Boek</span></button>
   </nav>
 
-<!-- Add Book Modal Dialog -->
-<div id="addBookModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="bg-cafe-800 border border-cafe-700 max-h-[90vh] w-full max-w-lg rounded-xl shadow-2xl overflow-y-auto p-6 space-y-4">
-    <div class="flex justify-between items-center border-b border-cafe-700 pb-3">
-      <h3 class="text-lg font-bold">Nieuw boek toevoegen</h3>
-      <button onclick="toggleModal('addBookModal', false)" class="text-stone-400 hover:text-cafe-cream text-xl">&times;</button>
+  <!-- Add Book Modal Dialog -->
+  <div id="addBookModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-cafe-800 border border-cafe-700 max-h-[90vh] w-full max-w-lg rounded-xl shadow-2xl overflow-y-auto p-6 space-y-4">
+      <div class="flex justify-between items-center border-b border-cafe-700 pb-3">
+        <h3 class="text-lg font-bold">Nieuw boek toevoegen</h3>
+        <button onclick="toggleModal('addBookModal', false)" class="text-stone-400 hover:text-cafe-cream text-xl">&times;</button>
+      </div>
+
+      <!-- ISBN Opzoekvak -->
+      <div class="bg-cafe-900/80 p-3 rounded-lg border border-cafe-700/60 space-y-2">
+        <label class="block text-xs font-semibold text-cafe-accent">Snel invullen via ISBN</label>
+        <div class="flex space-x-2">
+          <input type="text" id="formIsbn" placeholder="Bijv. 9789022595244" class="flex-1 bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-sm text-cafe-cream focus:outline-none focus:border-cafe-accent">
+          <button type="button" onclick="fetchBookDetailsByISBN()" id="isbnSearchBtn" class="bg-cafe-accent hover:bg-amber-700 text-cafe-900 font-bold px-4 py-2 rounded-lg text-xs transition-all">
+            Zoek Boek
+          </button>
+        </div>
+        <p id="isbnFeedback" class="text-[11px] text-stone-400 hidden"></p>
+      </div>
+
+      <form id="addBookForm" onsubmit="handleFormSubmit(event)" class="space-y-3 text-sm">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Titel *</label>
+          <input type="text" id="formTitle" required class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Auteur *</label>
+          <input type="text" id="formAuthor" required class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Status</label>
+            <select id="formStatus" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+              <option value="To Read">To Read</option>
+              <option value="Reading">Reading</option>
+              <option value="Finished">Finished</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Rating (1-5)</label>
+            <input type="number" id="formRating" min="1" max="5" step="0.5" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Genre</label>
+            <input type="text" id="formGenre" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Bladzijden</label>
+            <input type="number" id="formPages" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Serie Naam</label>
+            <input type="text" id="formSeriesName" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Serie Deel</label>
+            <input type="number" id="formSeriesPart" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">TBR Lijst (bijv. "Jaarlijst, mei")</label>
+          <input type="text" id="formTbrLijst" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Cover URL</label>
+          <input type="url" id="formCoverUrl" placeholder="https://..." class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+        </div>
+        
+        <!-- Cover Preview -->
+        <div id="coverPreviewContainer" class="hidden flex items-center space-x-3 p-2 bg-cafe-900/50 rounded-lg border border-cafe-700">
+          <img id="coverPreviewImg" src="" alt="Cover preview" class="w-10 h-14 object-cover rounded shadow-md">
+          <div class="text-[11px] text-stone-400">
+            <p class="font-semibold text-cafe-cream">Cover Voorbeeld</p>
+            <p>Gevonden via Google Books API</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
+          <input type="date" id="formEndDate" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
+        </div>
+        <div class="pt-2">
+          <button type="submit" id="submitBtn" class="w-full bg-cafe-accent text-cafe-900 font-bold py-2.5 rounded-lg transition-all hover:bg-amber-700">
+            Boek Opslaan
+          </button>
+        </div>
+      </form>
     </div>
-
-    <!-- ISBN Snelzoeker -->
-    <div class="bg-cafe-900/80 p-3 rounded-lg border border-cafe-700/60 space-y-2">
-      <label class="block text-xs font-semibold text-cafe-accent">Snel invullen via ISBN</label>
-      <div class="flex space-x-2">
-        <input type="text" id="formIsbn" placeholder="Bijv. 9789022595244" class="flex-1 bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-sm text-cafe-cream focus:outline-none focus:border-cafe-accent">
-        <button type="button" onclick="fetchBookDetailsByISBN()" id="isbnSearchBtn" class="bg-cafe-accent hover:bg-amber-700 text-cafe-900 font-bold px-4 py-2 rounded-lg text-xs transition-all">
-          Zoek Boek
-        </button>
-      </div>
-      <p id="isbnFeedback" class="text-[11px] text-stone-400 hidden"></p>
-    </div>
-
-    <form id="addBookForm" onsubmit="handleFormSubmit(event)" class="space-y-3 text-sm">
-      <div>
-        <label class="block text-xs font-semibold mb-1 text-stone-400">Titel *</label>
-        <input type="text" id="formTitle" required class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-      </div>
-      <div>
-        <label class="block text-xs font-semibold mb-1 text-stone-400">Auteur *</label>
-        <input type="text" id="formAuthor" required class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Status</label>
-          <select id="formStatus" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-            <option value="To Read">To Read</option>
-            <option value="Reading">Reading</option>
-            <option value="Finished">Finished</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Rating (1-5)</label>
-          <input type="number" id="formRating" min="1" max="5" step="0.5" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Genre</label>
-          <input type="text" id="formGenre" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Bladzijden</label>
-          <input type="number" id="formPages" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Serie Naam</label>
-          <input type="text" id="formSeriesName" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Serie Deel</label>
-          <input type="number" id="formSeriesPart" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-        </div>
-      </div>
-      <div>
-        <label class="block text-xs font-semibold mb-1 text-stone-400">Cover URL</label>
-        <input type="url" id="formCoverUrl" placeholder="https://..." class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-      </div>
-      
-      <!-- Mini Preview Sectie -->
-      <div id="coverPreviewContainer" class="hidden flex items-center space-x-3 p-2 bg-cafe-900/50 rounded-lg border border-cafe-700">
-        <img id="coverPreviewImg" src="" alt="Cover preview" class="w-10 h-14 object-cover rounded shadow-md">
-        <div class="text-[11px] text-stone-400">
-          <p class="font-semibold text-cafe-cream">Cover Voorbeeld</p>
-          <p>Afbeelding geladen via Google Books</p>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
-        <input type="date" id="formEndDate" class="w-full bg-cafe-900 border border-cafe-700 rounded-lg p-2 text-cafe-cream focus:outline-none focus:border-cafe-accent">
-      </div>
-      <div class="pt-2">
-        <button type="submit" id="submitBtn" class="w-full bg-cafe-accent text-cafe-900 font-bold py-2.5 rounded-lg transition-all hover:bg-amber-700">
-          Boek Opslaan
-        </button>
-      </div>
-    </form>
   </div>
-</div>
 
-  <!-- JavaScript App Logic -->
   <script>
-    // --- Configuration Variables (Insert details from GAS Deployments) ---
-    const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbx4EYoHqxWPfnTzeT2Ph4UB33D7jI5lG7rdsfH7EglPTPgdP3iU-g5PyoA_um7c8f3Z/exec';
+    // --- CONFIGURATIE (VUL HIER UW GEGEVENS IN) ---
+    const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2DI807MnjJNqBfDhWlcxuRQ3f21ywSIYC4vcB2nHqT4Dw4bN_J5LavQ/exec';
     const API_TOKEN = 'BAv1Juni';
 
     let appState = {
       library: [],
       series: [],
-      challenge: ""
+      challenge: []
     };
 
     let wrappedChartInstance = null;
 
-    // --- Service Worker Register ---
+    // --- Service Worker registratie ---
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW Registration failed", err));
+      navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW failed", err));
     }
 
-    // --- Initial Load ---
     document.addEventListener("DOMContentLoaded", () => {
       fetchLibraryData();
     });
 
-    // --- API Operations ---
+    // --- Data ophalen via API ---
     function fetchLibraryData() {
       const url = `${GAS_WEBAPP_URL}?token=${encodeURIComponent(API_TOKEN)}`;
       
       fetch(url)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error("Status code error: " + res.status);
+          return res.json();
+        })
         .then(data => {
           if (data.error) {
-            alert("Security Error fetching metadata: " + data.error);
+            alert("Beveiligingsfout: " + data.error);
             return;
           }
           appState.library = data.library || [];
           appState.series = data.series || [];
-          appState.challenge = data.challenge || "";
+          appState.challenge = data.challenge || [];
 
-          // Populate Dashboard Widgets
-          initTimeMachine();
-          initMonthlyShelf();
-          initSeriesTracker();
-          renderStats();
+          // Opslaan in LocalStorage voor offline modus
+          localStorage.setItem('book_tracker_cache', JSON.stringify(appState));
+
+          renderUI();
         })
         .catch(err => {
-          console.error("Critical communications error:", err);
-          // Load from LocalStorage if offline
+          console.error("Netwerkfout, herstel met offline cache...", err);
           const cached = localStorage.getItem('book_tracker_cache');
           if (cached) {
             appState = JSON.parse(cached);
-            initTimeMachine();
-            initMonthlyShelf();
-            initSeriesTracker();
-            renderStats();
+            renderUI();
           }
         });
+    }
+
+    function renderUI() {
+      initChallenge();
+      initTimeMachine();
+      initMonthlyShelf();
+      initSeriesTracker();
+      renderStats();
+    }
+
+    // --- Challenge Rendering (De 12 Boeken in 2026) ---
+    function initChallenge() {
+      const el = document.getElementById('challengeText');
+      if (appState.challenge && appState.challenge.length > 0) {
+        // We filteren de boeken die al zijn uitgelezen uit de 12 geselecteerde titels
+        const challengeTitles = appState.challenge;
+        const finishedBooks = appState.library.filter(b => 
+          (b.status === 'Finished' || b.status === 'Gelezen') && 
+          challengeTitles.some(title => String(b.titel).toLowerCase().trim() === String(title).toLowerCase().trim())
+        );
+
+        el.innerText = `${finishedBooks.length} van de ${challengeTitles.length} boeken uitgelezen voor je 2026 challenge!`;
+      } else {
+        el.innerText = "Geen challenge boeken gevonden in TBR 2026 kolom P.";
+      }
     }
 
     // --- On This Day Time Machine ---
     function initTimeMachine() {
       const today = new Date();
-      const currentMonth = today.getMonth(); // 0-indexed
+      const currentMonth = today.getMonth();
       const currentDay = today.getDate();
       const currentYear = today.getFullYear();
 
@@ -304,7 +336,6 @@
         const endDateObj = new Date(book.einddatum);
         if (isNaN(endDateObj)) return false;
 
-        // Check matching day/month but filter out the current calendar year
         return (
           endDateObj.getDate() === currentDay &&
           endDateObj.getMonth() === currentMonth &&
@@ -322,7 +353,7 @@
           const yearsAgo = currentYear - new Date(book.einddatum).getFullYear();
           const card = document.createElement('p');
           card.className = "text-sm text-stone-200 mt-1";
-          card.innerHTML = `On this day <strong>${yearsAgo} year${yearsAgo > 1 ? 's' : ''} ago</strong>, you finished reading <span class="italic text-cafe-accent">"${book.titel}"</span> by ${book.auteur}.`;
+          card.innerHTML = `Vandaag exact <strong>${yearsAgo} jaar geleden</strong> las je <span class="italic text-cafe-accent">"${book.titel}"</span> van ${book.auteur} uit!`;
           container.appendChild(card);
         });
       } else {
@@ -330,27 +361,29 @@
       }
     }
 
-    // --- Monthly Curated Shelf (Exactly 4 dynamic placeholder slots) ---
+    // --- Maandelijkse TBR-Kast op basis van 'TBR Lijst' kolom ---
     function initMonthlyShelf() {
       const today = new Date();
-      const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
-      const currentMonthText = monthNames[today.getMonth()]; // e.g., "may"
+      const nederlandseMaanden = [
+        "januari", "februari", "maart", "april", "mei", "juni", 
+        "juli", "augustus", "september", "oktober", "november", "december"
+      ];
+      const huidigeMaand = nederlandseMaanden[today.getMonth()]; // Bv. "mei"
 
-      // Filter books flagged in 'TBR Lijst' column for current month
-      let shelfBooks = appState.library.filter(book => {
-        const flag = String(book.tbr_lijst || '').toLowerCase();
-        return flag.includes(currentMonthText) || flag.includes('curated');
+      // Filteren uit 'Alle Boeken' waar de kolom 'TBR Lijst' de huidige maandnaam bevat
+      let tbrBooks = appState.library.filter(book => {
+        if (!book.tbr_lijst) return false;
+        const tbrWaarde = String(book.tbr_lijst).toLowerCase().trim();
+        return tbrWaarde.includes(huidigeMaand);
       });
 
-      // Pad or slice down to exactly 4 books
-      shelfBooks = shelfBooks.slice(0, 4);
+      tbrBooks = tbrBooks.slice(0, 4);
 
       const shelfContainer = document.getElementById('curatedShelf');
       shelfContainer.innerHTML = "";
 
-      // Ensure 4 books visually representable
       for (let i = 0; i < 4; i++) {
-        const book = shelfBooks[i];
+        const book = tbrBooks[i];
         const wrapper = document.createElement('div');
         wrapper.className = "flex flex-col items-center justify-end h-full relative cursor-pointer";
 
@@ -360,166 +393,25 @@
             <div class="book-spine relative w-16 h-32 rounded bg-cover bg-center shadow-lg border-l border-white/20" style="background-image: url('${bookCover}')" title="${book.titel} by ${book.auteur}">
               <div class="absolute inset-y-0 left-0 w-1 bg-black/10"></div>
             </div>
-            <span class="text-[9px] text-stone-400 mt-1 truncate max-w-[5ch]" title="${book.titel}">${book.titel}</span>
+            <span class="text-[9px] text-stone-400 mt-1 truncate max-w-[8ch]" title="${book.titel}">${book.titel}</span>
           `;
         } else {
-          // Empty slots represent aesthetic placeholder spines
           wrapper.innerHTML = `
             <div class="w-14 h-24 rounded border border-dashed border-stone-700 flex items-center justify-center text-xs text-stone-600">
               ☕
             </div>
-            <span class="text-[9px] text-stone-600 mt-1">Empty</span>
+            <span class="text-[9px] text-stone-600 mt-1">Leeg</span>
           `;
         }
         shelfContainer.appendChild(wrapper);
       }
     }
-    
-    // --- Google Books API Integratie via ISBN ---
-function fetchBookDetailsByISBN() {
-  const isbnInput = document.getElementById('formIsbn');
-  const isbn = isbnInput.value.trim().replace(/[-\s]/g, ''); // Verwijder streepjes en spaties
-  const feedback = document.getElementById('isbnFeedback');
-  const searchBtn = document.getElementById('isbnSearchBtn');
 
-  if (!isbn) {
-    showIsbnFeedback("Vul eerst een ISBN-nummer in.", "text-amber-500");
-    return;
-  }
-
-  // Visuele status updaten naar 'laden'
-  searchBtn.disabled = true;
-  searchBtn.innerText = "Zoeken...";
-  showIsbnFeedback("Gegevens ophalen...", "text-stone-400");
-
-  const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
-
-  fetch(apiUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Netwerkrespons was niet ok");
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.totalItems === 0 || !data.items) {
-        showIsbnFeedback("Geen boek gevonden voor dit ISBN. Vul de velden handmatig in.", "text-amber-500");
-        return;
-      }
-
-      const volumeInfo = data.items[0].volumeInfo;
-
-      // Velden invullen met gevonden data (en fallback naar leeg bij afwezigheid)
-      document.getElementById('formTitle').value = volumeInfo.title || '';
-      
-      // Auteurs converteren van array naar komma-gescheiden tekst
-      if (volumeInfo.authors && volumeInfo.authors.length > 0) {
-        document.getElementById('formAuthor').value = volumeInfo.authors.join(', ');
-      } else {
-        document.getElementById('formAuthor').value = '';
-      }
-
-      // Bladzijden invullen
-      document.getElementById('formPages').value = volumeInfo.pageCount || '';
-
-      // Cover URL ophalen en HTTP forceren naar HTTPS om PWA mixed-content waarschuwingen te voorkomen
-      let coverUrl = '';
-      if (volumeInfo.imageLinks) {
-        coverUrl = volumeInfo.imageLinks.thumbnail || volumeInfo.imageLinks.smallThumbnail || '';
-        coverUrl = coverUrl.replace(/^http:/i, 'https:');
-      }
-      document.getElementById('formCoverUrl').value = coverUrl;
-
-      // Toon cover preview in het formulier
-      const previewContainer = document.getElementById('coverPreviewContainer');
-      const previewImg = document.getElementById('coverPreviewImg');
-      if (coverUrl) {
-        previewImg.src = coverUrl;
-        previewContainer.classList.remove('hidden');
-      } else {
-        previewContainer.classList.add('hidden');
-      }
-
-      // Automatisch een genre-suggestie doen indien beschikbaar
-      if (volumeInfo.categories && volumeInfo.categories.length > 0) {
-        document.getElementById('formGenre').value = volumeInfo.categories[0];
-      }
-
-      showIsbnFeedback("Gegevens succesvol geladen!", "text-emerald-500");
-    })
-    .catch(error => {
-      console.error("Fout bij ophalen ISBN gegevens:", error);
-      showIsbnFeedback("Fout bij ophalen van gegevens. Probeer het opnieuw.", "text-red-500");
-    })
-    .finally(() => {
-      searchBtn.disabled = false;
-      searchBtn.innerText = "Zoek Boek";
-    });
-}
-
-// Hulpmiddelen om feedback tekst te tonen
-function showIsbnFeedback(message, colorClass) {
-  const feedback = document.getElementById('isbnFeedback');
-  feedback.className = `text-[11px] ${colorClass}`;
-  feedback.innerText = message;
-  feedback.classList.remove('hidden');
-}
-
-// --- Aangepaste FormSubmit Handler (Inclusief ISBN) ---
-function handleFormSubmit(event) {
-  event.preventDefault();
-  const submitBtn = document.getElementById('submitBtn');
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Opslaan in Google Sheet...";
-
-  // Verzamel alle gegevens als platte tekst om naar het Google Apps Script te sturen
-  const requestPayload = {
-    token: API_TOKEN,
-    titel: document.getElementById('formTitle').value,
-    auteur: document.getElementById('formAuthor').value,
-    status: document.getElementById('formStatus').value,
-    rating: document.getElementById('formRating').value,
-    genre: document.getElementById('formGenre').value,
-    bladzijden: document.getElementById('formPages').value,
-    serienaam: document.getElementById('formSeriesName').value,
-    serie_deel: document.getElementById('formSeriesPart').value,
-    cover_url: document.getElementById('formCoverUrl').value,
-    isbn: document.getElementById('formIsbn').value.trim(), // Stuur het ingevulde ISBN mee als platte tekst
-    einddatum: document.getElementById('formEndDate').value
-  };
-
-  fetch(GAS_WEBAPP_URL, {
-    method: 'POST',
-    mode: 'no-cors', // Apps Script vereist 'no-cors' voor soepele redirects bij POST
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestPayload)
-  })
-  .then(() => {
-    alert("Boek succesvol opgeslagen!");
-    toggleModal('addBookModal', false);
-    
-    // Reset het formulier en verberg de preview
-    document.getElementById('addBookForm').reset();
-    document.getElementById('coverPreviewContainer').classList.add('hidden');
-    document.getElementById('isbnFeedback').classList.add('hidden');
-    
-    fetchLibraryData(); // Herlaad de app-gegevens
-  })
-  .catch(err => {
-    alert("Er is een fout opgetreden bij het opslaan: " + err.message);
-  })
-  .finally(() => {
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Boek Opslaan";
-  });
-}
-
-    // --- Series Track View Component ---
+    // --- Series Voortgang Tracker ---
     function initSeriesTracker() {
       const container = document.getElementById('seriesView');
       container.innerHTML = "";
 
-      // Group existing Library entries by Series Title
       const seriesGroups = {};
       appState.library.forEach(book => {
         if (book.serienaam && book.serienaam.trim() !== "") {
@@ -530,16 +422,14 @@ function handleFormSubmit(event) {
       });
 
       if (Object.keys(seriesGroups).length === 0) {
-        container.innerHTML = `<p class="text-sm text-stone-500">No series tracked yet.</p>`;
+        container.innerHTML = `<p class="text-sm text-stone-500">Nog geen series gevonden.</p>`;
         return;
       }
 
-      // Display each series progress with a dynamic meter
       for (const [seriesName, books] of Object.entries(seriesGroups)) {
-        // Sort sequence dynamically based on series installment numbers
         books.sort((a, b) => Number(a.serie_deel || 0) - Number(b.serie_deel || 0));
 
-        const completedCount = books.filter(b => b.status === 'Finished').length;
+        const completedCount = books.filter(b => b.status === 'Finished' || b.status === 'Gelezen').length;
         const percent = Math.round((completedCount / books.length) * 100);
 
         const card = document.createElement('div');
@@ -547,16 +437,15 @@ function handleFormSubmit(event) {
         card.innerHTML = `
           <div>
             <h4 class="font-bold text-sm truncate">${seriesName}</h4>
-            <span class="text-[10px] text-cafe-accent font-medium">${completedCount} of ${books.length} Books Finished</span>
+            <span class="text-[10px] text-cafe-accent font-medium">${completedCount} van de ${books.length} gelezen</span>
           </div>
-          <!-- Bar -->
           <div class="w-full bg-cafe-900 rounded-full h-1.5 overflow-hidden">
             <div class="bg-cafe-accent h-1.5 rounded-full" style="width: ${percent}%"></div>
           </div>
           <div class="text-[10px] space-y-1 text-stone-400">
             ${books.map(b => {
-              const marker = b.status === 'Finished' ? '●' : '○';
-              return `<div class="truncate ${b.status === 'Finished' ? 'text-stone-300 line-through' : ''}">${marker} Part ${b.serie_deel || '?'}: ${b.titel}</div>`;
+              const isGelezen = b.status === 'Finished' || b.status === 'Gelezen';
+              return `<div class="truncate ${isGelezen ? 'text-stone-500 line-through' : 'text-stone-300'}">${isGelezen ? '●' : '○'} Deel ${b.serie_deel || '?'}: ${b.titel}</div>`;
             }).join('')}
           </div>
         `;
@@ -564,18 +453,16 @@ function handleFormSubmit(event) {
       }
     }
 
-    // --- 2. "Book Wrapped" Visual Analytics Engine ---
+    // --- Book Wrapped Stats & Trends ---
     function renderStats() {
       const selectedYear = Number(document.getElementById('wrappedYearSelect').value);
       
-      // Filter library down to finished entries with dynamic match criteria
       const finishedInYear = appState.library.filter(book => {
-        if (book.status !== 'Finished' || !book.einddatum) return false;
+        if ((book.status !== 'Finished' && book.status !== 'Gelezen') || !book.einddatum) return false;
         const parsedYear = new Date(book.einddatum).getFullYear();
         return parsedYear === selectedYear;
       });
 
-      // Calculate Metrics
       const totalBooks = finishedInYear.length;
       let totalPages = 0;
       let ratingSum = 0;
@@ -596,7 +483,6 @@ function handleFormSubmit(event) {
 
       const avgRating = ratingCount > 0 ? (ratingSum / ratingCount).toFixed(1) : "0.0";
       
-      // Determine Top Genre
       let topGenre = "-";
       let maxCount = 0;
       for (const [genre, count] of Object.entries(genreCounts)) {
@@ -606,22 +492,19 @@ function handleFormSubmit(event) {
         }
       }
 
-      // Render Text fields
       document.getElementById('statTotalBooks').innerText = totalBooks;
       document.getElementById('statTotalPages').innerText = totalPages;
       document.getElementById('statAvgRating').innerText = avgRating;
       document.getElementById('statTopGenre').innerText = topGenre;
 
-      // Group pages by month sequence to draw trends
       const monthlyPages = Array(12).fill(0);
       finishedInYear.forEach(book => {
         if (book.bladzijden && book.einddatum) {
-          const month = new Date(book.einddatum).getMonth(); // 0-11
+          const month = new Date(book.einddatum).getMonth();
           monthlyPages[month] += Number(book.bladzijden);
         }
       });
 
-      // Render Chart.js
       const ctx = document.getElementById('wrappedChart').getContext('2d');
       if (wrappedChartInstance) {
         wrappedChartInstance.destroy();
@@ -630,11 +513,11 @@ function handleFormSubmit(event) {
       wrappedChartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          labels: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
           datasets: [{
-            label: 'Pages Read',
+            label: 'Pagina\'s Gelezen',
             data: monthlyPages,
-            backgroundColor: '#d97706', // Soft Amber Accent
+            backgroundColor: '#d97706',
             borderRadius: 4,
             barPercentage: 0.6
           }]
@@ -642,29 +525,93 @@ function handleFormSubmit(event) {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: {
-              grid: { display: false },
-              ticks: { color: '#a8a29e', font: { size: 10 } }
-            },
-            y: {
-              grid: { color: '#44403c' },
-              ticks: { color: '#a8a29e', font: { size: 10 } }
-            }
+            x: { grid: { display: false }, ticks: { color: '#a8a29e', font: { size: 10 } } },
+            y: { grid: { color: '#44403c' }, ticks: { color: '#a8a29e', font: { size: 10 } } }
           }
         }
       });
     }
 
-    // --- 4. Secure Write-Back Submission ---
+    // --- Google Books API ISBN Zoeker ---
+    function fetchBookDetailsByISBN() {
+      const isbnInput = document.getElementById('formIsbn');
+      const isbn = isbnInput.value.trim().replace(/[-\s]/g, '');
+      const feedback = document.getElementById('isbnFeedback');
+      const searchBtn = document.getElementById('isbnSearchBtn');
+
+      if (!isbn) {
+        showIsbnFeedback("Vul eerst een ISBN in.", "text-amber-500");
+        return;
+      }
+
+      searchBtn.disabled = true;
+      searchBtn.innerText = "Zoeken...";
+      showIsbnFeedback("Boekgegevens ophalen...", "text-stone-400");
+
+      fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+        .then(response => {
+          if (!response.ok) throw new Error("API-fout");
+          return response.json();
+        })
+        .then(data => {
+          if (data.totalItems === 0 || !data.items) {
+            showIsbnFeedback("Geen boek gevonden. Vul de velden handmatig in.", "text-amber-500");
+            return;
+          }
+
+          const volumeInfo = data.items[0].volumeInfo;
+
+          document.getElementById('formTitle').value = volumeInfo.title || '';
+          document.getElementById('formAuthor').value = volumeInfo.authors ? volumeInfo.authors.join(', ') : '';
+          document.getElementById('formPages').value = volumeInfo.pageCount || '';
+
+          let coverUrl = '';
+          if (volumeInfo.imageLinks) {
+            coverUrl = volumeInfo.imageLinks.thumbnail || volumeInfo.imageLinks.smallThumbnail || '';
+            coverUrl = coverUrl.replace(/^http:/i, 'https:');
+          }
+          document.getElementById('formCoverUrl').value = coverUrl;
+
+          const previewContainer = document.getElementById('coverPreviewContainer');
+          const previewImg = document.getElementById('coverPreviewImg');
+          if (coverUrl) {
+            previewImg.src = coverUrl;
+            previewContainer.classList.remove('hidden');
+          } else {
+            previewContainer.classList.add('hidden');
+          }
+
+          if (volumeInfo.categories && volumeInfo.categories.length > 0) {
+            document.getElementById('formGenre').value = volumeInfo.categories[0];
+          }
+
+          showIsbnFeedback("Gegevens geladen!", "text-emerald-500");
+        })
+        .catch(error => {
+          console.error(error);
+          showIsbnFeedback("Fout bij ophalen. Probeer het opnieuw.", "text-red-500");
+        })
+        .finally(() => {
+          searchBtn.disabled = false;
+          searchBtn.innerText = "Zoek Boek";
+        });
+    }
+
+    function showIsbnFeedback(message, colorClass) {
+      const feedback = document.getElementById('isbnFeedback');
+      feedback.className = `text-[11px] ${colorClass}`;
+      feedback.innerText = message;
+      feedback.classList.remove('hidden');
+    }
+
+    // --- Boek Toevoegen Opslaan (POST) ---
     function handleFormSubmit(event) {
       event.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.innerText = "Saving inside Google Ecosystem...";
+      submitBtn.innerText = "Opslaan...";
 
       const requestPayload = {
         token: API_TOKEN,
@@ -676,34 +623,35 @@ function handleFormSubmit(event) {
         bladzijden: document.getElementById('formPages').value,
         serienaam: document.getElementById('formSeriesName').value,
         serie_deel: document.getElementById('formSeriesPart').value,
+        tbr_lijst: document.getElementById('formTbrLijst').value,
         cover_url: document.getElementById('formCoverUrl').value,
+        isbn: document.getElementById('formIsbn').value.trim(),
         einddatum: document.getElementById('formEndDate').value
       };
 
-      // Direct write operation execution
       fetch(GAS_WEBAPP_URL, {
         method: 'POST',
-        mode: 'no-cors', // Standard CORS configurations inside Apps Script endpoints are bypassed gracefully via no-cors redirects
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestPayload)
       })
       .then(() => {
-        // Appending without custom headers successfully triggers "no-cors" fallback save sequence
-        alert("Metadata added securely!");
+        alert("Boek succesvol weggeschreven!");
         toggleModal('addBookModal', false);
         document.getElementById('addBookForm').reset();
-        fetchLibraryData(); // refresh dashboard
+        document.getElementById('coverPreviewContainer').classList.add('hidden');
+        document.getElementById('isbnFeedback').classList.add('hidden');
+        fetchLibraryData();
       })
       .catch(err => {
-        alert("Operation error: " + err.message);
+        alert("Opslaan mislukt: " + err.message);
       })
       .finally(() => {
         submitBtn.disabled = false;
-        submitBtn.innerText = "Save Book Entry";
+        submitBtn.innerText = "Boek Opslaan";
       });
     }
 
-    // --- Modal View Helpers ---
     function toggleModal(id, show) {
       const modal = document.getElementById(id);
       if (show) {
