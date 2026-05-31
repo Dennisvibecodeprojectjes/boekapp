@@ -534,26 +534,36 @@
       });
     }
 
-    // --- Google Books API ISBN Zoeker ---
-    // --- ISBN Zoeker met Dual-Search (Google Books & Open Library Fallback) ---
+// =========================================================================
+// INGEBOUWDE ISBN ZOEKER (GOOGLE BOOKS & OPEN LIBRARY DUAL-SEARCH)
+// =========================================================================
+
+// 1. Hoofdfunctie voor ISBN Zoeken
 function fetchBookDetailsByISBN() {
   const isbnInput = document.getElementById('formIsbn');
+  if (!isbnInput) {
+    console.error("Veld 'formIsbn' niet gevonden in de HTML.");
+    return;
+  }
   
   // Strip ALLES behalve cijfers en de letter X/x (voor 10-cijferige ISBN's)
   const isbn = isbnInput.value.trim().replace(/[^0-9Xx]/g, '');
-  const feedback = document.getElementById('isbnFeedback');
   const searchBtn = document.getElementById('isbnSearchBtn');
 
   if (!isbn) {
-    showIsbnFeedback("Vul een geldig ISBN-nummer in.", "text-amber-500");
+    showIsbnFeedback("Vul een geldig ISBN-nummer in (alleen cijfers).", "text-amber-500");
     return;
   }
 
-  searchBtn.disabled = true;
-  searchBtn.innerText = "Zoeken...";
-  showIsbnFeedback("Gegevens ophalen via Google...", "text-stone-400");
+  // Zet de knop in de wachtstand
+  if (searchBtn) {
+    searchBtn.disabled = true;
+    searchBtn.innerText = "Zoeken...";
+  }
+  
+  showIsbnFeedback("Gegevens ophalen via Google Books...", "text-stone-400");
 
-  // 1. Probeer eerst Google Books API
+  // A. Probeer eerst Google Books API
   fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
     .then(response => {
       if (!response.ok) throw new Error("Google Books HTTP Fout");
@@ -561,8 +571,7 @@ function fetchBookDetailsByISBN() {
     })
     .then(data => {
       if (data.totalItems === 0 || !data.items) {
-        // Google Books heeft geen resultaten, schakel over naar Open Library
-        console.warn("Geen resultaat bij Google. Overschakelen naar Open Library...");
+        console.warn("Geen resultaten in Google Books. Schakel over naar Open Library...");
         fetchFromOpenLibrary(isbn);
         return;
       }
@@ -576,22 +585,24 @@ function fetchBookDetailsByISBN() {
         cover: volumeInfo.imageLinks ? (volumeInfo.imageLinks.thumbnail || volumeInfo.imageLinks.smallThumbnail || '') : '',
         genre: volumeInfo.categories ? volumeInfo.categories[0] : ''
       });
+      
       showIsbnFeedback("Gegevens geladen via Google Books!", "text-emerald-500");
+      if (searchBtn) {
+        searchBtn.disabled = false;
+        searchBtn.innerText = "Zoek Boek";
+      }
     })
     .catch(error => {
-      // Netwerkfout (bv. adblocker blokkeert Google). Schakel over naar Open Library
-      console.warn("Google Books geblokkeerd of mislukt. Overschakelen naar Open Library...", error);
+      // Netwerkfout (bv. adblocker blokkeert Google). Schakel direct over naar Open Library
+      console.warn("Google Books mislukt of geblokkeerd. Proberen via Open Library...", error);
       fetchFromOpenLibrary(isbn);
-    })
-    .finally(() => {
-      searchBtn.disabled = false;
-      searchBtn.innerText = "Zoek Boek";
     });
 }
 
-// 2. Open Library Fallback (Adblocker-proof en open-source)
+// 2. Fallback: Open Library Zoeken (als Google Books faalt of geblokkeerd wordt)
 function fetchFromOpenLibrary(isbn) {
-  showIsbnFeedback("Gegevens ophalen via Open Library...", "text-stone-400");
+  showIsbnFeedback("Google mislukt. Gegevens ophalen via Open Library...", "text-stone-400");
+  const searchBtn = document.getElementById('isbnSearchBtn');
 
   fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`)
     .then(res => {
@@ -602,6 +613,10 @@ function fetchFromOpenLibrary(isbn) {
       const key = `ISBN:${isbn}`;
       if (!data[key]) {
         showIsbnFeedback("Boek niet gevonden in beide databases. Vul handmatig in.", "text-amber-500");
+        if (searchBtn) {
+          searchBtn.disabled = false;
+          searchBtn.innerText = "Zoek Boek";
+        }
         return;
       }
 
@@ -609,21 +624,57 @@ function fetchFromOpenLibrary(isbn) {
       const authorNames = bookInfo.authors ? bookInfo.authors.map(a => a.name).join(', ') : '';
       let coverUrl = bookInfo.cover ? (bookInfo.cover.large || bookInfo.cover.medium || '') : '';
       coverUrl = coverUrl.replace(/^http:/i, 'https:'); // Forceer HTTPS
-      const genreName = bookInfo.subjects ? bookInfo.subjects[0].name : '';
 
       populateFormFields({
         title: bookInfo.title || '',
         author: authorNames,
         pages: bookInfo.number_of_pages || '',
         cover: coverUrl,
-        genre: genreName
+        genre: bookInfo.subjects ? bookInfo.subjects[0].name : ''
       });
+      
       showIsbnFeedback("Gegevens geladen via Open Library!", "text-emerald-500");
+      if (searchBtn) {
+        searchBtn.disabled = false;
+        searchBtn.innerText = "Zoek Boek";
+      }
     })
     .catch(err => {
       console.error(err);
-      showIsbnFeedback("Fout bij ophalen via beide databases. Vul handmatig in.", "text-red-500");
+      showIsbnFeedback("Fout bij ophalen. Controleer uw verbinding.", "text-red-500");
+      if (searchBtn) {
+        searchBtn.disabled = false;
+        searchBtn.innerText = "Zoek Boek";
+      }
     });
+}
+
+// 3. Hulpfunctie om de formuliervelden automatisch in te vullen
+function populateFormFields(data) {
+  document.getElementById('formTitle').value = data.title;
+  document.getElementById('formAuthor').value = data.author;
+  document.getElementById('formPages').value = data.pages;
+  document.getElementById('formCoverUrl').value = data.cover;
+  document.getElementById('formGenre').value = data.genre || '';
+
+  const previewContainer = document.getElementById('coverPreviewContainer');
+  const previewImg = document.getElementById('coverPreviewImg');
+  if (data.cover) {
+    previewImg.src = data.cover;
+    previewContainer.classList.remove('hidden');
+  } else {
+    previewContainer.classList.add('hidden');
+  }
+}
+
+// 4. Hulpfunctie om feedback-berichten te tonen onder de ISBN-balk
+function showIsbnFeedback(message, colorClass) {
+  const feedback = document.getElementById('isbnFeedback');
+  if (feedback) {
+    feedback.className = `text-[11px] ${colorClass}`;
+    feedback.innerText = message;
+    feedback.classList.remove('hidden');
+  }
 }
 
 // 3. Helper om formuliervelden netjes te vullen
