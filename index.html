@@ -1043,30 +1043,22 @@ function safeParseMonth(dateVal) {
 // HERSTELDE & FOUTBESTENDIGE STATISTIEKEN ENGINE (BOOK WRAPPED)
 // =========================================================================
 
-const finishedInYear = appState.library.filter(book => {
-      // 1. Maak de status-check ongevoelig voor letters en taal (pakt 'Finished' én 'Gelezen')
-      const status = String(book.status || '').toLowerCase().trim();
-      if (status !== 'finished' && status !== 'gelezen') return false;
-      if (!book.einddatum) return false;
+function renderWrappedStats() {
+  try {
+    const selectedYear = Number(document.getElementById('wrappedYearSelect').value) || new Date().getFullYear();
+    const isGlobal = activeWrappedView === 'algemeen';
+
+    // 1. Veilig filteren van de gelezen boeken (Type-beveiligd)
+    const finishedBooks = appState.library.filter(b => {
+      const status = String(b.status || '').toLowerCase().trim();
+      if (status !== 'gelezen') return false;
+      if (!b.einddatum) return false;
+      if (isGlobal) return true;
       
-      // 2. Ontleed het jaartal op een veilige manier (pakt 31-05-2026 én 2026-05-31)
-      const dateStr = String(book.einddatum).trim();
-      let parsedYear = null;
-      
-      const yyyymmdd = dateStr.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
-      if (yyyymmdd) parsedYear = parseInt(yyyymmdd[1], 10);
-      
-      const ddmmyyyy = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
-      if (ddmmyyyy) parsedYear = parseInt(ddmmyyyy[3], 10);
-      
-      if (!parsedYear) {
-        const d = new Date(dateStr);
-        parsedYear = isNaN(d.getTime()) ? null : d.getFullYear();
-      }
-      
+      const parsedYear = safeParseYear(b.einddatum);
       return parsedYear === selectedYear;
     });
-    
+
     const totalBooks = finishedBooks.length;
     let totalPages = 0;
     let ratingSum = 0;
@@ -1734,15 +1726,6 @@ const finishedInYear = appState.library.filter(book => {
         submitBtn.innerText = "Opslaan in Database";
       });
     }
-
-function destroyAllCharts() {
-  for (const [key, instance] of Object.entries(chartInstances)) {
-    if (instance) {
-      instance.destroy();
-    }
-  }
-  chartInstances = {};
-}
   </script>
 </body>
 </html>
