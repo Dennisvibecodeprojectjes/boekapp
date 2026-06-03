@@ -1,21 +1,21 @@
 {
   "short_name": "BookCafe",
-  "name": "Book Cafe - Cozy Tracker & Library",
+  "name": "Book Cafe - Cozy Luxury Tracker",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=192&auto=format&fit=crop",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icon-512.png",
+      "src": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=512&auto=format&fit=crop",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/index.html",
-  "background_color": "#1c1917",
-  "theme_color": "#1c1917",
+  "start_url": "./index.html",
+  "background_color": "#1a1311",
+  "theme_color": "#1a1311",
   "display": "standalone",
   "orientation": "portrait"
 }
