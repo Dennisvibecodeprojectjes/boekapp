@@ -389,11 +389,10 @@
 
         <div>
           <label class="block text-xs font-semibold mb-1 text-stone-400">Leesstatus</label>
-          <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream">
-            <option value="Reading">Reading</option>
-            <option value="Finished">Finished</option>
-            <option value="TBR">TBR</option>
-          </select>
+         <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+  <option value="Bezig">Bezig</option>
+  <option value="Gelezen">Gelezen</option>
+</select>
         </div>
 
         <div>
@@ -559,48 +558,48 @@ const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2D
 
     // --- TAB 1: HOME CONTROLLER & SCHEDULING ---
 
-    // 1. Nu Aan Het Lezen (Currently Reading)
-    function renderCurrentlyReading() {
-      const container = document.getElementById('currentlyReadingWidget');
-      // We checken de boeken met status 'Reading'
-      const readingBooks = appState.library.filter(b => b.status === 'Reading');
+function renderCurrentlyReading() {
+  const container = document.getElementById('currentlyReadingWidget');
+  
+  // Zoek specifiek naar boeken met de status "Bezig" (ongeacht hoofdletters of spaties)
+  const readingBooks = appState.library.filter(b => {
+    const status = String(b.status || '').toLowerCase().trim();
+    return status === 'bezig';
+  });
 
-      if (readingBooks.length === 0) {
-        container.innerHTML = `
-          <div class="flex items-center space-x-4">
-            <div class="w-16 h-24 rounded border border-dashed border-stone-700 flex items-center justify-center text-3xl">🪑</div>
-            <div class="flex-1">
-              <h3 class="font-bold text-sm text-stone-300">Geen actief leesboek</h3>
-              <p class="text-xs text-stone-500 mt-1">Kies een boek uit je kast om direct te starten met lezen.</p>
-            </div>
-          </div>
-        `;
-        // Geen action beschikbaar bij klik
-        container.onclick = () => switchTab('newbook');
-        return;
-      }
-
-      const activeBook = readingBooks[0];
-      const cover = activeBook.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
-      
-      // Bereken voortgang indien bekend
-      const pages = activeBook.bladzijden ? `${activeBook.bladzijden} pagina's` : 'Aantal bladzijden onbekend';
-
-      container.innerHTML = `
-        <div class="flex items-center space-x-4">
-          <img src="${cover}" alt="Book cover" class="w-16 h-24 object-cover rounded shadow-md border border-stone-800">
-          <div class="flex-1 space-y-1 min-w-0">
-            <span class="inline-block bg-accentGold/20 text-accentGold text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Actief Boek</span>
-            <h3 class="font-bold text-base truncate text-warmCream">${activeBook.titel}</h3>
-            <p class="text-xs text-stone-400 truncate">${activeBook.auteur}</p>
-            <p class="text-[11px] text-stone-500">${pages}</p>
-          </div>
-          <span class="text-2xl text-accentGold">✏️</span>
+  if (readingBooks.length === 0) {
+    container.innerHTML = `
+      <div class="flex items-center space-x-4">
+        <div class="w-16 h-24 rounded border border-dashed border-stone-700 flex items-center justify-center text-3xl">🪑</div>
+        <div class="flex-1">
+          <h3 class="font-bold text-sm text-stone-300">Geen actief leesboek</h3>
+          <p class="text-xs text-stone-500 mt-1">Kies een boek uit je TBR-kast of voeg een nieuw boek toe om te starten.</p>
         </div>
-      `;
+      </div>
+    `;
+    container.onclick = () => switchTab('newbook');
+    return;
+  }
 
-      container.onclick = () => openCurrentlyReadingModal(activeBook);
-    }
+  const activeBook = readingBooks[0];
+  const cover = activeBook.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+  const pages = activeBook.bladzijden ? `${activeBook.bladzijden} pagina's` : 'Aantal bladzijden onbekend';
+
+  container.innerHTML = `
+    <div class="flex items-center space-x-4">
+      <img src="${cover}" alt="Book cover" class="w-16 h-24 object-cover rounded shadow-md border border-stone-800">
+      <div class="flex-1 space-y-1 min-w-0">
+        <span class="inline-block bg-accentGold/20 text-accentGold text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Nu aan het Lezen</span>
+        <h3 class="font-bold text-base truncate text-warmCream">${activeBook.titel}</h3>
+        <p class="text-xs text-stone-400 truncate">${activeBook.auteur}</p>
+        <p class="text-[11px] text-stone-500">${pages}</p>
+      </div>
+      <span class="text-2xl text-accentGold">✏️</span>
+    </div>
+  `;
+
+  container.onclick = () => openCurrentlyReadingModal(activeBook);
+}
 
     // 2. Challenge Target & Modals
     function renderChallengeProgress() {
@@ -1217,55 +1216,54 @@ const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2D
     }
 
     function handleLogUpdateSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('logSubmitBtn');
-      btn.disabled = true;
-      btn.innerText = "Bezig met verwerken...";
+  e.preventDefault();
+  const btn = document.getElementById('logSubmitBtn');
+  btn.disabled = true;
+  btn.innerText = "Bezig met verwerken...";
 
-      // Fetch original book to ensure we don't drop fields
-      const original = appState.library.find(b => 
-        b.titel.toLowerCase().trim() === document.getElementById('logBookTitle').value.toLowerCase().trim() &&
-        b.auteur.toLowerCase().trim() === document.getElementById('logBookAuthor').value.toLowerCase().trim()
-      ) || {};
+  // Haal het originele boek op om geen andere kolommen te overschrijven
+  const original = appState.library.find(b => 
+    b.titel.toLowerCase().trim() === document.getElementById('logBookTitle').value.toLowerCase().trim() &&
+    b.auteur.toLowerCase().trim() === document.getElementById('logBookAuthor').value.toLowerCase().trim()
+  ) || {};
 
-      const requestPayload = {
-        token: API_TOKEN,
-        titel: document.getElementById('logBookTitle').value,
-        auteur: document.getElementById('logBookAuthor').value,
-        status: document.getElementById('logStatus').value,
-        rating: document.getElementById('logRatingVal').value,
-        begindatum: document.getElementById('logStartDate').value,
-        einddatum: document.getElementById('logEndDate').value,
-        review: document.getElementById('logReview').value,
-        // Preserve other fields
-        categorie: original.categorie || '',
-        genre: original.genre || '',
-        publicatiejaar: original.publicatiejaar || '',
-        bladzijden: original.bladzijden || '',
-        isbn: original.isbn || '',
-        serienaam: original.serienaam || '',
-        serie_deel: original.serie_deel || '',
-        cover_url: original.cover_url || '',
-        tbr_lijst: original.tbr_lijst || ''
-      };
+  const requestPayload = {
+    token: API_TOKEN,
+    titel: document.getElementById('logBookTitle').value,
+    auteur: document.getElementById('logBookAuthor').value,
+    status: document.getElementById('logStatus').value, // Stuurt 'Bezig' of 'Gelezen' naar de sheet
+    rating: document.getElementById('logRatingVal').value,
+    begindatum: document.getElementById('logStartDate').value,
+    einddatum: document.getElementById('logEndDate').value,
+    review: document.getElementById('logReview').value,
+    categorie: original.categorie || '',
+    genre: original.genre || '',
+    publicatiejaar: original.publicatiejaar || '',
+    bladzijden: original.bladzijden || '',
+    isbn: original.isbn || '',
+    serienaam: original.serienaam || '',
+    serie_deel: original.serie_deel || '',
+    cover_url: original.cover_url || '',
+    tbr_lijst: original.tbr_lijst || ''
+  };
 
-      fetch(GAS_WEBAPP_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestPayload)
-      })
-      .then(() => {
-        alert("Boek succesvol bijgewerkt!");
-        closeModal();
-        fetchLibraryData();
-      })
-      .catch(err => alert("Fout: " + err.message))
-      .finally(() => {
-        btn.disabled = false;
-        btn.innerText = "Logboek Opslaan";
-      });
-    }
+  fetch(GAS_WEBAPP_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestPayload)
+  })
+  .then(() => {
+    alert("Boek succesvol bijgewerkt!");
+    closeModal();
+    fetchLibraryData();
+  })
+  .catch(err => alert("Fout bij bijwerken: " + err.message))
+  .finally(() => {
+    btn.disabled = false;
+    btn.innerText = "Logboek Opslaan";
+  });
+}
 
     function openChallengeModal() {
       document.getElementById('modalBackdrop').classList.remove('hidden');
