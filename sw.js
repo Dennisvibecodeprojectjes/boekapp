@@ -1,8 +1,8 @@
-const CACHE_NAME = 'bookcafe-cache-v1';
+const CACHE_NAME = 'bookcafe-luxe-cache-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  './',
+  './index.html',
+  './manifest.json',
   'https://cdn.tailwindcss.com',
   'https://cdn.jsdelivr.net/npm/chart.js'
 ];
@@ -16,7 +16,6 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Network falling back to Cache for static resources
   e.respondWith(
     fetch(e.request).catch(() => {
       return caches.match(e.request);
