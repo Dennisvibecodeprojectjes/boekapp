@@ -563,7 +563,7 @@ const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2D
     function renderCurrentlyReading() {
       const container = document.getElementById('currentlyReadingWidget');
       // We checken de boeken met status 'Reading'
-      const readingBooks = appState.library.filter(b => b.status === 'Reading');
+      const readingBooks = appState.library.filter(b => b.status === 'Bezig');
 
       if (readingBooks.length === 0) {
         container.innerHTML = `
