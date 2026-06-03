@@ -274,8 +274,8 @@
             <label class="block text-xs font-semibold mb-1 text-stone-400">Status</label>
             <select id="formStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
               <option value="TBR">TBR</option>
-              <option value="Reading">Bezig</option>
-              <option value="Finished">Gelezen</option>
+              <option value="Bezig">Bezig</option>
+              <option value="Gelezen">Gelezen</option>
             </select>
           </div>
           <div>
@@ -359,7 +359,6 @@
   <!-- Interactive Modals backdrop -->
   <div id="modalBackdrop" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
     
-    <!-- 1. Currently Reading / Log Update Modal -->
     <!-- 1. Currently Reading / Log Update Modal -->
     <div id="currentlyReadingModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4">
       <div class="flex justify-between items-center border-b border-stone-800 pb-3">
@@ -466,7 +465,8 @@
   </nav>
 
   <!-- JS CONTROLLERS & ENGINE -->
-// --- APP STATE & KEYS ---
+  <script>
+    // --- APP STATE & KEYS ---
     const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2DI807MnjJNqBfDhWlcxuRQ3f21ywSIYC4vcB2nHqT4Dw4bN_J5LavQ/exec';
     const API_TOKEN = 'BAv1Juni';
 
@@ -703,21 +703,6 @@
 
       const rating = Number(book.rating || 0);
       setInteractiveRatingStars(rating);
-    }
-
-    // --- Interactive rating stars generator ---
-    function setInteractiveRatingStars(rating) {
-      document.getElementById('logRatingVal').value = rating;
-      const container = document.getElementById('starContainer');
-      container.innerHTML = "";
-      
-      for (let i = 1; i <= 5; i++) {
-        const star = document.createElement('span');
-        star.innerText = i <= rating ? '★' : '☆';
-        star.className = i <= rating ? 'text-accentGold' : 'text-stone-600';
-        star.onclick = () => setInteractiveRatingStars(i);
-        container.appendChild(star);
-      }
     }
 
     // --- 3. Het logboek opslaan via POST (Gelezen status / Rating / Review) ---
@@ -1500,6 +1485,7 @@
       document.getElementById('nestedReviewModal').classList.add('hidden');
     }
 
+    // Algemene sluitfunctie voor alle hoofdmodals
     function closeModal() {
       document.getElementById('modalBackdrop').classList.add('hidden');
       document.getElementById('currentlyReadingModal').classList.add('hidden');
@@ -1688,5 +1674,6 @@
         submitBtn.innerText = "Opslaan in Database";
       });
     }
+  </script>
 </body>
 </html>
