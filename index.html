@@ -1734,6 +1734,15 @@ const finishedInYear = appState.library.filter(book => {
         submitBtn.innerText = "Opslaan in Database";
       });
     }
+    // --- Plak dit helemaal onderaan uw script, vlak boven </script> ---
+function destroyAllCharts() {
+  for (const [key, instance] of Object.entries(chartInstances)) {
+    if (instance) {
+      instance.destroy();
+    }
+  }
+  chartInstances = {};
+}
   </script>
 </body>
 </html>
