@@ -360,57 +360,45 @@
   <div id="modalBackdrop" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
     
     <!-- 1. Currently Reading / Log Update Modal -->
-    <!-- 1. Currently Reading / Log Update Modal -->
     <div id="currentlyReadingModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4">
       <div class="flex justify-between items-center border-b border-stone-800 pb-3">
         <h3 class="text-lg font-bold text-accentGold">Boeklog Bijwerken</h3>
         <button onclick="closeModal()" class="text-stone-400 hover:text-warmCream text-2xl">&times;</button>
       </div>
-      
-      <!-- Boek info weergave in de pop-up -->
-      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-800">
-        <img id="modalBookCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-700" alt="Cover">
-        <div class="min-w-0">
-          <h4 id="modalBookTitleDisplay" class="font-bold text-sm text-warmCream truncate">Titel</h4>
-          <p id="modalBookAuthorDisplay" class="text-xs text-stone-400 truncate">Auteur</p>
-        </div>
-      </div>
-
       <form id="logUpdateForm" onsubmit="handleLogUpdateSubmit(event)" class="space-y-4 text-sm">
         <input type="hidden" id="logBookTitle">
         <input type="hidden" id="logBookAuthor">
         
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1 text-stone-400">Begindatum</label>
-            <input type="date" id="logStartDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
-            <input type="date" id="logEndDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
-          </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Begindatum</label>
+          <input type="date" id="logStartDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
+          <input type="date" id="logEndDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream">
         </div>
         
-        <div class="grid grid-cols-2 gap-3 items-center">
-          <div>
-            <label class="block text-xs font-semibold mb-1 text-stone-400">Leesstatus</label>
-            <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
-              <option value="Bezig">Bezig</option>
-              <option value="Gelezen">Gelezen</option>
-            </select>
+        <!-- Interactive 5-star Picker -->
+        <div>
+          <label class="block text-xs font-semibold mb-2 text-stone-400">Rating</label>
+          <div class="flex space-x-2 text-2xl cursor-pointer select-none" id="starContainer">
+            <!-- Rendered by JS -->
           </div>
-          <div>
-            <label class="block text-xs font-semibold mb-2 text-stone-400">Rating</label>
-            <div class="flex space-x-1 text-xl cursor-pointer select-none" id="starContainer">
-              <!-- Gesterde rating via JS -->
-            </div>
-            <input type="hidden" id="logRatingVal" value="0">
-          </div>
+          <input type="hidden" id="logRatingVal" value="0">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Mijn Review / Notities</label>
-          <textarea id="logReview" rows="3" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold" placeholder="Wat vind je van het boek?"></textarea>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Leesstatus</label>
+          <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream">
+            <option value="Reading">Reading</option>
+            <option value="Finished">Finished</option>
+            <option value="TBR">TBR</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Mijn Review</label>
+          <textarea id="logReview" rows="3" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream"></textarea>
         </div>
 
         <button type="submit" id="logSubmitBtn" class="w-full bg-accentGold text-espresso font-bold py-2.5 rounded-lg">
@@ -575,7 +563,7 @@ const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2D
     function renderCurrentlyReading() {
       const container = document.getElementById('currentlyReadingWidget');
       // We checken de boeken met status 'Reading'
-      const readingBooks = appState.library.filter(b => b.status === 'Bezig');
+      const readingBooks = appState.library.filter(b => b.status === 'Reading');
 
       if (readingBooks.length === 0) {
         container.innerHTML = `
