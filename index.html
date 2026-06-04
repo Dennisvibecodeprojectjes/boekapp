@@ -1138,13 +1138,13 @@ function renderCurrentlyReading() {
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#a8a29e', font: { size: 9 } } } } }
       });
 
-      // Chart 6: Score per genre
-      const avgGenreRatings = [];
-      const genreLabelsForRatings = Object.keys(genreRatings).slice(0, 5);
-      genreLabelsForRatings.forEach(g => {
-        const item = genreRatings[g];
-        avgGenreRatings.push((item.sum / item.count).toFixed(2));
-      });
+     // Chart 6: Score per genre (Nu keurig gesorteerd op populairste genres!)
+        const avgGenreRatings = [];
+        const genreLabelsForRatings = genresLabels; // Neemt automatisch de gesorteerde top 5 genres over!
+        genreLabelsForRatings.forEach(g => {
+          const item = genreRatings[g] || { sum: 0, count: 0 };
+          avgGenreRatings.push(item.count > 0 ? (item.sum / item.count).toFixed(2) : 0);
+        });
 
       chartInstances['chartRatingPerGenre'] = new Chart(document.getElementById('chartRatingPerGenre'), {
         type: 'bar',
