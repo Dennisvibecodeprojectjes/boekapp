@@ -617,86 +617,92 @@ function renderCurrentlyReading() {
       document.getElementById('challengeProgressText').innerText = `${count} van de ${target} boeken uitgelezen voor je 2026 challenge!`;
     }
 
-// --- Gecorrigeerde Time Machine (100% zelfstandig, adblocker- en crash-proof) ---
+// --// --- Diagnostische Time Machine ---
     function renderTimeMachine() {
-      const today = new Date();
-      const currentMonth = today.getMonth(); 
-      const currentDay = today.getDate();
-      const currentYear = today.getFullYear();
+      try {
+        const today = new Date();
+        const currentMonth = today.getMonth(); 
+        const currentDay = today.getDate();
+        const currentYear = today.getFullYear();
 
-      const matchedBooks = appState.library.filter(book => {
-        if (!book.einddatum) return false;
-        
-        const dateStr = String(book.einddatum).trim();
-        let bDay = null, bMonth = null, bYear = null;
-
-        // 1. Ontleed YYYY-MM-DD
-        const yyyymmdd = dateStr.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
-        if (yyyymmdd) {
-          bYear = parseInt(yyyymmdd[1], 10);
-          bMonth = parseInt(yyyymmdd[2], 10) - 1; 
-          bDay = parseInt(yyyymmdd[3], 10);
-        }
-
-        // 2. Ontleed DD-MM-YYYY
-        const ddmmyyyy = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
-        if (ddmmyyyy) {
-          bDay = parseInt(ddmmyyyy[1], 10);
-          bMonth = parseInt(ddmmyyyy[2], 10) - 1;
-          bYear = parseInt(ddmmyyyy[3], 10);
-        }
-
-        // Als het ontleden is mislukt, doe een veilige fallback
-        if (bDay === null || bMonth === null || bYear === null) {
-          const fallbackDate = new Date(dateStr);
-          if (isNaN(fallbackDate)) return false;
-          bDay = fallbackDate.getDate();
-          bMonth = fallbackDate.getMonth();
-          bYear = fallbackDate.getFullYear();
-        }
-
-        return (
-          bDay === currentDay &&
-          bMonth === currentMonth &&
-          bYear < currentYear
-        );
-      });
-
-      const section = document.getElementById('timeMachineSection');
-      const carousel = document.getElementById('timeMachineCarousel');
-      carousel.innerHTML = "";
-
-      if (matchedBooks.length > 0) {
-        section.classList.remove('hidden');
-        matchedBooks.forEach(book => {
+        const matchedBooks = appState.library.filter(book => {
+          if (!book.einddatum) return false;
+          
           const dateStr = String(book.einddatum).trim();
-          
-          // Bereken de jaren geleden op een veilige, zelfstandige manier
-          let bookYear = null;
-          const matchYyyy = dateStr.match(/^(\d{4})/);
-          if (matchYyyy) bookYear = parseInt(matchYyyy[1], 10);
-          
-          const matchDdmmyyyy = dateStr.match(/(\d{4})$/);
-          if (matchDdmmyyyy && !bookYear) bookYear = parseInt(matchDdmmyyyy[1], 10);
-          
-          if (!bookYear) {
-            bookYear = new Date(dateStr).getFullYear() || currentYear;
+          let bDay = null, bMonth = null, bYear = null;
+
+          // 1. Ontleed YYYY-MM-DD
+          const yyyymmdd = dateStr.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+          if (yyyymmdd) {
+            bYear = parseInt(yyyymmdd[1], 10);
+            bMonth = parseInt(yyyymmdd[2], 10) - 1; 
+            bDay = parseInt(yyyymmdd[3], 10);
           }
-          
-          const yearsAgo = currentYear - bookYear;
-          const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
-          
-          const card = document.createElement('div');
-          card.className = "flex-shrink-0 w-36 snap-center bg-cafeCard border border-stone-800 p-3 rounded-xl flex flex-col items-center space-y-2 shadow-lg";
-          card.innerHTML = `
-            <span class="text-[9px] uppercase font-bold text-accentGold tracking-widest text-center">Exact ${yearsAgo} jaar geleden!</span>
-            <img src="${cover}" class="w-20 h-28 object-cover rounded shadow border border-stone-800" alt="Cover">
-            <p class="text-[11px] font-bold text-center truncate w-full" title="${book.titel}">${book.titel}</p>
-          `;
-          carousel.appendChild(card);
+
+          // 2. Ontleed DD-MM-YYYY
+          const ddmmyyyy = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+          if (ddmmyyyy) {
+            bDay = parseInt(ddmmyyyy[1], 10);
+            bMonth = parseInt(ddmmyyyy[2], 10) - 1;
+            bYear = parseInt(ddmmyyyy[3], 10);
+          }
+
+          // Als het ontleden is mislukt, doe een veilige fallback
+          if (bDay === null || bMonth === null || bYear === null) {
+            const fallbackDate = new Date(dateStr);
+            if (isNaN(fallbackDate)) return false;
+            bDay = fallbackDate.getDate();
+            bMonth = fallbackDate.getMonth();
+            bYear = fallbackDate.getFullYear();
+          }
+
+          return (
+            bDay === currentDay &&
+            bMonth === currentMonth &&
+            bYear < currentYear
+          );
         });
-      } else {
-        section.classList.add('hidden');
+
+        const section = document.getElementById('timeMachineSection');
+        const carousel = document.getElementById('timeMachineCarousel');
+        carousel.innerHTML = "";
+
+        if (matchedBooks.length > 0) {
+          section.classList.remove('hidden');
+          matchedBooks.forEach(book => {
+            const dateStr = String(book.einddatum).trim();
+            
+            // Bereken de jaren geleden op een veilige, zelfstandige manier
+            let bookYear = null;
+            const matchYyyy = dateStr.match(/^(\d{4})/);
+            if (matchYyyy) bookYear = parseInt(matchYyyy[1], 10);
+            
+            const matchDdmmyyyy = dateStr.match(/(\d{4})$/);
+            if (matchDdmmyyyy && !bookYear) bookYear = parseInt(matchDdmmyyyy[1], 10);
+            
+            if (!bookYear) {
+              bookYear = new Date(dateStr).getFullYear() || currentYear;
+            }
+            
+            const yearsAgo = currentYear - bookYear;
+            const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+            
+            const card = document.createElement('div');
+            card.className = "flex-shrink-0 w-36 snap-center bg-cafeCard border border-stone-800 p-3 rounded-xl flex flex-col items-center space-y-2 shadow-lg";
+            card.innerHTML = `
+              <span class="text-[9px] uppercase font-bold text-accentGold tracking-widest text-center">Exact ${yearsAgo} jaar geleden!</span>
+              <img src="${cover}" class="w-20 h-28 object-cover rounded shadow border border-stone-800" alt="Cover">
+              <p class="text-[11px] font-bold text-center truncate w-full" title="${book.titel}">${book.titel}</p>
+            `;
+            carousel.appendChild(card);
+          });
+        } else {
+          section.classList.add('hidden');
+        }
+
+      } catch (err) {
+        // Forceer een duidelijke pop-up met de exacte fout als er een JS-fout optreedt
+        alert("Fout in Time Machine: " + err.message + "\n\nStacktrace:\n" + err.stack);
       }
     }
     
