@@ -617,22 +617,49 @@ function renderCurrentlyReading() {
       document.getElementById('challengeProgressText').innerText = `${count} van de ${target} boeken uitgelezen voor je 2026 challenge!`;
     }
 
-    // 3. Horizontal Swiping Time Machine Carousel
+// --- Gecorrigeerde Time Machine zonder tijdzone-verschuivingen ---
     function renderTimeMachine() {
       const today = new Date();
-      const currentMonth = today.getMonth();
+      const currentMonth = today.getMonth(); // 0-indexed (mei = 4, juni = 5)
       const currentDay = today.getDate();
       const currentYear = today.getFullYear();
 
       const matchedBooks = appState.library.filter(book => {
         if (!book.einddatum) return false;
-        const endDateObj = new Date(book.einddatum);
-        if (isNaN(endDateObj)) return false;
+        
+        const dateStr = String(book.einddatum).trim();
+        let bDay = null, bMonth = null, bYear = null;
 
+        // 1. Ontleed YYYY-MM-DD
+        const yyyymmdd = dateStr.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+        if (yyyymmdd) {
+          bYear = parseInt(yyyymmdd[1], 10);
+          bMonth = parseInt(yyyymmdd[2], 10) - 1; // Maak 0-indexed
+          bDay = parseInt(yyyymmdd[3], 10);
+        }
+
+        // 2. Ontleed DD-MM-YYYY
+        const ddmmyyyy = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+        if (ddmmyyyy) {
+          bDay = parseInt(ddmmyyyy[1], 10);
+          bMonth = parseInt(ddmmyyyy[2], 10) - 1;
+          bYear = parseInt(ddmmyyyy[3], 10);
+        }
+
+        // Als het ontleden is mislukt, doe een veilige fallback
+        if (bDay === null || bMonth === null || bYear === null) {
+          const fallbackDate = new Date(dateStr);
+          if (isNaN(fallbackDate)) return false;
+          bDay = fallbackDate.getDate();
+          bMonth = fallbackDate.getMonth();
+          bYear = fallbackDate.getFullYear();
+        }
+
+        // Vergelijk nu exact dag en maand met vandaag
         return (
-          endDateObj.getDate() === currentDay &&
-          endDateObj.getMonth() === currentMonth &&
-          endDateObj.getFullYear() < currentYear
+          bDay === currentDay &&
+          bMonth === currentMonth &&
+          bYear < currentYear
         );
       });
 
@@ -643,7 +670,11 @@ function renderCurrentlyReading() {
       if (matchedBooks.length > 0) {
         section.classList.remove('hidden');
         matchedBooks.forEach(book => {
-          const yearsAgo = currentYear - new Date(book.einddatum).getFullYear();
+          // Bereken de exacte jaren geleden
+          const dateStr = String(book.einddatum).trim();
+          const bookYear = safeParseYear(dateStr) || new Date(dateStr).getFullYear();
+          const yearsAgo = currentYear - bookYear;
+          
           const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
           
           const card = document.createElement('div');
