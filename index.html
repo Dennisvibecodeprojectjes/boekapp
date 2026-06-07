@@ -164,33 +164,33 @@
       </div>
     </div>
 
-    <!-- TAB 3: BOOK WRAPPED (DATAVISUALISATIE) -->
-    <div id="tab-wrapped" class="tab-content hidden space-y-8">
+<!-- TAB 3: BOOK WRAPPED (DATAVISUALISATIE - EDIT VOOR HOOG CONTRAST) -->
+    <div id="tab-wrapped" class="tab-content hidden space-y-8 animate-fade-in">
       
       <!-- Top Nav Toggle -->
-      <div class="flex flex-col sm:flex-row gap-3 justify-between sm:items-center bg-cafeCard p-4 rounded-xl border border-stone-800">
+      <div class="flex flex-col sm:flex-row gap-3 justify-between sm:items-center bg-cafeCard p-4 rounded-xl border border-stone-200 shadow-md">
         <div class="flex space-x-2">
-          <button id="wrappedToggleAlgemeen" onclick="setWrappedView('algemeen')" class="px-4 py-2 text-xs font-bold rounded-lg bg-accentGold text-espresso">Algemeen</button>
-          <button id="wrappedToggleJaar" onclick="setWrappedView('jaar')" class="px-4 py-2 text-xs font-bold rounded-lg text-stone-400 border border-stone-800">Per Jaar</button>
+          <button id="wrappedToggleAlgemeen" onclick="setWrappedView('algemeen')" class="px-4 py-2 text-xs font-bold rounded-lg bg-accentGold text-espresso shadow">Algemeen</button>
+          <button id="wrappedToggleJaar" onclick="setWrappedView('jaar')" class="px-4 py-2 text-xs font-bold rounded-lg text-stone-600 border border-stone-300 hover:text-warmCream transition-all">Per Jaar</button>
         </div>
-        <select id="wrappedYearSelect" onchange="renderWrappedStats()" class="bg-espresso border border-stone-800 text-warmCream rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-accentGold focus:outline-none">
-          <!-- Programmatically filled from 2010 to current year -->
+        <select id="wrappedYearSelect" onchange="renderWrappedStats()" class="bg-espresso border border-stone-300 text-warmCream rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-accentGold focus:outline-none">
+          <!-- Programmatically filled -->
         </select>
       </div>
 
-      <!-- Core Metrics Grid (Always Visible) -->
+      <!-- Core Metrics Grid -->
       <div class="grid grid-cols-3 gap-3">
-        <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl text-center shadow-lg">
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl text-center shadow-md">
           <span class="text-2xl font-bold text-accentGold" id="wrapTotalBooks">0</span>
-          <p class="text-[9px] uppercase tracking-wider text-stone-400 mt-1">Gelezen boeken</p>
+          <p class="text-[9px] uppercase tracking-wider text-stone-600 font-bold mt-1">Gelezen boeken</p>
         </div>
-        <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl text-center shadow-lg">
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl text-center shadow-md">
           <span class="text-2xl font-bold text-accentGold" id="wrapTotalPages">0</span>
-          <p class="text-[9px] uppercase tracking-wider text-stone-400 mt-1">Gelezen pagina's</p>
+          <p class="text-[9px] uppercase tracking-wider text-stone-600 font-bold mt-1">Gelezen pagina's</p>
         </div>
-        <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl text-center shadow-lg">
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl text-center shadow-md">
           <span class="text-2xl font-bold text-accentGold" id="wrapAvgRating">0.0</span>
-          <p class="text-[9px] uppercase tracking-wider text-stone-400 mt-1">Gem. Beoordeling</p>
+          <p class="text-[9px] uppercase tracking-wider text-stone-600 font-bold mt-1">Gem. Beoordeling</p>
         </div>
       </div>
 
@@ -202,53 +202,53 @@
       <!-- The Charts Suite -->
       <div class="grid gap-6 sm:grid-cols-2">
         
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Pagina's per Maand</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Pagina's per Maand</h3>
           <div class="h-48 relative"><canvas id="chartPagesPerMonth"></canvas></div>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Top Genres</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Top Genres</h3>
           <div class="h-48 relative"><canvas id="chartTopGenres"></canvas></div>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Aantal Boeken per Auteur</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Aantal Boeken per Auteur</h3>
           <div class="h-48 relative"><canvas id="chartBooksPerAuthor"></canvas></div>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Rating Distributie</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Rating Distributie</h3>
           <div class="h-48 relative"><canvas id="chartRatingDistribution"></canvas></div>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Serie vs Standalone</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Serie vs Standalone</h3>
           <div class="h-48 relative"><canvas id="chartSeriesVsStandalone"></canvas></div>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Score per Genre</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Score per Genre</h3>
           <div class="h-48 relative"><canvas id="chartRatingPerGenre"></canvas></div>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg space-y-2 sm:col-span-2">
-          <h3 class="text-xs font-semibold tracking-wider uppercase text-stone-400">Leesjaar vs Publicatiejaar</h3>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2 sm:col-span-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Leesjaar vs Publicatiejaar</h3>
           <div class="h-64 relative"><canvas id="chartPublicationYearScatter"></canvas></div>
         </div>
 
         <!-- Metric widgets -->
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg flex items-center justify-between">
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex items-center justify-between">
           <div>
-            <h4 class="text-xs font-semibold uppercase text-stone-400">Leessnelheid</h4>
+            <h4 class="text-xs font-bold uppercase text-stone-600">Leessnelheid</h4>
             <p id="metricReadSpeed" class="text-xl font-bold text-accentGold mt-1">-</p>
           </div>
           <span class="text-3xl">⚡</span>
         </div>
 
-        <div class="bg-cafeCard border border-stone-800/80 p-4 rounded-xl shadow-lg flex items-center justify-between">
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex items-center justify-between">
           <div>
-            <h4 class="text-xs font-semibold uppercase text-stone-400">Voltooide Series</h4>
+            <h4 class="text-xs font-bold uppercase text-stone-600">Voltooide Series</h4>
             <p id="metricCompletedSeries" class="text-xl font-bold text-accentGold mt-1">-</p>
           </div>
           <span class="text-3xl">📚</span>
@@ -257,7 +257,6 @@
       </div>
 
     </div>
-
     <!-- TAB 4: NIEUW BOEK -->
     <div id="tab-newbook" class="tab-content hidden space-y-6">
       
@@ -1273,7 +1272,7 @@
 
 
     // =========================================================================
-    // HERSTELDE & FOUTBESTENDIGE STATISTIEKEN ENGINE (BOOK WRAPPED)
+    // HOOG-CONTRAST STATISTIEKEN ENGINE (BOOK WRAPPED LIGHT MODE)
     // =========================================================================
 
     function renderWrappedStats() {
@@ -1307,12 +1306,10 @@
         let standaloneCount = 0;
 
         finishedBooks.forEach(book => {
-          // Pagina's optellen
           if (book.bladzijden) {
             totalPages += Number(book.bladzijden);
           }
           
-          // Beoordelingen verwerken
           if (book.rating && !isNaN(book.rating)) {
             const score = Number(book.rating);
             ratingSum += score;
@@ -1321,7 +1318,6 @@
             ratingDistribution[idx]++;
           }
 
-          // Genres tellen
           if (book.genre) {
             const g = String(book.genre).trim();
             if (g !== "") {
@@ -1334,7 +1330,6 @@
             }
           }
 
-          // Auteurs tellen
           if (book.auteur) {
             const a = String(book.auteur).trim();
             if (a !== "") {
@@ -1342,13 +1337,11 @@
             }
           }
 
-          // Pagina's per maand tellen
           if (book.einddatum) {
             const m = safeParseMonth(book.einddatum);
             monthlyPages[m] += Number(book.bladzijden || 0);
           }
 
-          // Scatter data vullen
           if (book.einddatum && book.publicatiejaar) {
             const rYear = safeParseYear(book.einddatum);
             const pYear = Number(book.publicatiejaar);
@@ -1357,7 +1350,6 @@
             }
           }
 
-          // Series vs Standalone tellen
           if (book.serienaam && String(book.serienaam).trim() !== "") {
             seriesCount++;
           } else {
@@ -1371,7 +1363,7 @@
         document.getElementById('wrapTotalPages').innerText = totalPages;
         document.getElementById('wrapAvgRating').innerText = avgRating;
 
-        // 2. Milestone Cards renderen (Foutveilig)
+        // 2. Milestone Cards renderen (Contrast aangepast voor lichte modus)
         const milestoneContainer = document.getElementById('milestoneCardsContainer');
         milestoneContainer.innerHTML = "";
 
@@ -1418,15 +1410,15 @@
           }
 
           milestoneContainer.innerHTML = `
-            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Volume)</span>
-              <span class="text-lg font-bold text-accentGold mt-1">${mostBooksYear}</span>
-              <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen in één kalenderjaar: <strong class="text-warmCream">${maxBooks} stuks</strong></p>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex flex-col justify-center">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Goudjaar (Volume)</span>
+              <span class="text-xl font-bold text-accentGold mt-1">${mostBooksYear}</span>
+              <p class="text-xs text-warmCream mt-1">Meeste boeken gelezen in één kalenderjaar: <strong class="text-warmCream">${maxBooks} stuks</strong></p>
             </div>
-            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Kwaliteit)</span>
-              <span class="text-lg font-bold text-accentGold mt-1">${bestRatingYear}</span>
-              <p class="text-xs text-stone-300 mt-1">Hoogste gem. rating in één kalenderjaar: <strong class="text-warmCream">${maxAvgRating.toFixed(2)} ⭐</strong></p>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex flex-col justify-center">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Goudjaar (Kwaliteit)</span>
+              <span class="text-xl font-bold text-accentGold mt-1">${bestRatingYear}</span>
+              <p class="text-xs text-warmCream mt-1">Hoogste gem. rating in één kalenderjaar: <strong class="text-warmCream">${maxAvgRating.toFixed(2)} ⭐</strong></p>
             </div>
           `;
         } else {
@@ -1463,20 +1455,20 @@
           const newAuthors = [...authorsReadInYear].filter(a => !authorsReadBefore.has(a));
 
           milestoneContainer.innerHTML = `
-            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Top Maand (Boeken)</span>
-              <h4 class="text-lg font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthBooksIdx]}</h4>
-              <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen: <strong class="text-warmCream">${monthlyBookCount[maxMonthBooksIdx]} boeken</strong></p>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Top Maand (Boeken)</span>
+              <h4 class="text-xl font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthBooksIdx]}</h4>
+              <p class="text-xs text-warmCream mt-1">Meeste boeken gelezen: <strong class="text-warmCream">${monthlyBookCount[maxMonthBooksIdx]} boeken</strong></p>
             </div>
-            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Top Maand (Pagina's)</span>
-              <h4 class="text-lg font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthPagesIdx]}</h4>
-              <p class="text-xs text-stone-300 mt-1">Meeste pagina's gelezen: <strong class="text-warmCream">${monthlyPageCount[maxMonthPagesIdx]} pag.</strong></p>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Top Maand (Pagina's)</span>
+              <h4 class="text-xl font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthPagesIdx]}</h4>
+              <p class="text-xs text-warmCream mt-1">Meeste pagina's gelezen: <strong class="text-warmCream">${monthlyPageCount[maxMonthPagesIdx]} pag.</strong></p>
             </div>
-            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg sm:col-span-2">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Nieuw ontdekte auteurs in ${selectedYear}</span>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md sm:col-span-2">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Nieuw ontdekte auteurs in ${selectedYear}</span>
               <div class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto">
-                ${newAuthors.length > 0 ? newAuthors.map(a => `<span class="bg-espresso border border-stone-800 text-[10px] px-2.5 py-1 rounded-full text-stone-300 font-medium">${a}</span>`).join('') : '<span class="text-stone-500 text-xs">Geen nieuwe auteurs ontdekt in dit jaar.</span>'}
+                ${newAuthors.length > 0 ? newAuthors.map(a => `<span class="bg-espresso border border-stone-300 text-[10px] px-2.5 py-1 rounded-full text-warmCream font-semibold">${a}</span>`).join('') : '<span class="text-stone-500 text-xs">Geen nieuwe auteurs ontdekt in dit jaar.</span>'}
               </div>
             </div>
           `;
@@ -1501,8 +1493,11 @@
         }
         document.getElementById('metricCompletedSeries').innerText = `${complSeries} Series`;
 
-        // 3. CHARTS RENDERING
+        // 3. CHARTS RENDERING (Met as-kleuren geoptimaliseerd voor lichte stand)
         destroyAllCharts();
+
+        const chartTextDarkColor = '#44342d'; // Koffiebruin voor as-teksten
+        const chartGridLightColor = '#ebdcd4'; // Zacht beige voor hulplijnen
 
         // Chart 1: Pages per month
         chartInstances['chartPagesPerMonth'] = new Chart(document.getElementById('chartPagesPerMonth'), {
@@ -1515,27 +1510,48 @@
               borderRadius: 4
             }]
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+              x: { ticks: { color: chartTextDarkColor, font: { size: 9, weight: 'bold' } }, grid: { display: false } }, 
+              y: { ticks: { color: chartTextDarkColor, font: { size: 9 } }, grid: { color: chartGridLightColor } } 
+            } 
+          }
         });
 
-// Chart 2: Top Genres (Keurig gesorteerd van hoog naar laag)
+        // Chart 2: Top Genres
+        const genresLabels = Object.keys(genreCounts).slice(0, 5);
+        const genresData = genresLabels.map(l => genreCounts[l]);
+        // Sorteer de genres eerst op het aantal boeken (van hoog naar laag)
         const sortedGenres = Object.entries(genreCounts)
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5);
 
-        const genresLabels = sortedGenres.map(x => x[0]);
-        const genresData = sortedGenres.map(x => x[1]);
+        const sortedLabels = sortedGenres.map(x => x[0]);
+        const sortedData = sortedGenres.map(x => x[1]);
+
         chartInstances['chartTopGenres'] = new Chart(document.getElementById('chartTopGenres'), {
           type: 'doughnut',
           data: {
-            labels: genresLabels,
+            labels: sortedLabels,
             datasets: [{
-              data: genresData,
-              backgroundColor: ['#ff8243', '#8e7568', '#fdfbf7', '#44342d', '#26201d'],
+              data: sortedData,
+              backgroundColor: ['#ff8243', '#8e7568', '#eadfd8', '#44342d', '#26201d'],
               borderWidth: 0
             }]
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#a8a29e', font: { size: 9 } } } } }
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { 
+              legend: { 
+                position: 'right', 
+                labels: { color: chartTextDarkColor, font: { size: 9, weight: 'bold' } } 
+              } 
+            } 
+          }
         });
 
         // Chart 3: Books per Author
@@ -1550,7 +1566,16 @@
               borderRadius: 4
             }]
           },
-          options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+          options: { 
+            indexAxis: 'y', 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+              x: { ticks: { color: chartTextDarkColor, font: { size: 9 } }, grid: { color: chartGridLightColor } }, 
+              y: { ticks: { color: chartTextDarkColor, font: { size: 9, weight: 'bold' } }, grid: { display: false } } 
+            } 
+          }
         });
 
         // Chart 4: Rating Distribution
@@ -1564,7 +1589,15 @@
               borderRadius: 4
             }]
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+              x: { ticks: { color: chartTextDarkColor, font: { size: 9, weight: 'bold' } }, grid: { display: false } }, 
+              y: { ticks: { color: chartTextDarkColor, font: { size: 9 } }, grid: { color: chartGridLightColor } } 
+            } 
+          }
         });
 
         // Chart 5: Series vs Standalone
@@ -1578,12 +1611,21 @@
               borderWidth: 0
             }]
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#a8a29e', font: { size: 9 } } } } }
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { 
+              legend: { 
+                position: 'bottom', 
+                labels: { color: chartTextDarkColor, font: { size: 9, weight: 'bold' } } 
+              } 
+            } 
+          }
         });
 
-        // Chart 6: Score per genre (Nu keurig gesorteerd op populairste genres!)
+        // Chart 6: Score per genre
         const avgGenreRatings = [];
-        const genreLabelsForRatings = genresLabels; // Neemt automatisch de gesorteerde top 5 genres over!
+        const genreLabelsForRatings = sortedLabels; // Synchroniseert met de gesorteerde topgenres
         genreLabelsForRatings.forEach(g => {
           const item = genreRatings[g] || { sum: 0, count: 0 };
           avgGenreRatings.push(item.count > 0 ? (item.sum / item.count).toFixed(2) : 0);
@@ -1599,7 +1641,15 @@
               borderRadius: 4
             }]
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { max: 5, ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+              x: { ticks: { color: chartTextDarkColor, font: { size: 9, weight: 'bold' } }, grid: { display: false } }, 
+              y: { max: 5, ticks: { color: chartTextDarkColor, font: { size: 9 } }, grid: { color: chartGridLightColor } } 
+            } 
+          }
         });
 
         // Chart 7: Scatter plot
@@ -1617,14 +1667,23 @@
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-              x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jaar Gelezen', color: '#a8a29e' }, ticks: { color: '#a8a29e', stepSize: 1, font: { size: 9 } } },
-              y: { title: { display: true, text: 'Origineel Publicatiejaar', color: '#a8a29e' }, ticks: { color: '#a8a29e', font: { size: 9 } } }
+              x: { 
+                type: 'linear', 
+                position: 'bottom', 
+                title: { display: true, text: 'Jaar Gelezen', color: chartTextDarkColor, font: { weight: 'bold' } }, 
+                ticks: { color: chartTextDarkColor, stepSize: 1, font: { size: 9 } },
+                grid: { color: chartGridLightColor }
+              },
+              y: { 
+                title: { display: true, text: 'Origineel Publicatiejaar', color: chartTextDarkColor, font: { weight: 'bold' } }, 
+                ticks: { color: chartTextDarkColor, font: { size: 9 } },
+                grid: { color: chartGridLightColor }
+              }
             }
           }
         });
 
       } catch (err) {
-        // Foutopvang: Mocht er een vreemde waarde in de spreadsheet staan, toon dit dan netjes
         console.error("Fout bij laden statistieken:", err);
         document.getElementById('milestoneCardsContainer').innerHTML = `
           <div class="col-span-2 bg-amber-950/20 border border-amber-900/50 p-4 rounded-xl text-center text-xs text-amber-500">
@@ -1634,7 +1693,6 @@
         `;
       }
     }
-
     // --- Hulpfunctie om grafieken veilig te vernietigen ---
     function destroyAllCharts() {
       for (const [key, instance] of Object.entries(chartInstances)) {
