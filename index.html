@@ -369,24 +369,24 @@
 
   </main>
 
- <!-- MODALS SYSTEM (CHALLENGE / CURRENTLY READING / NESTED REVIEWS / TBR LIST / CENTRAL REVIEW) -->
+ <!-- MODALS SYSTEM (CHALLENGE / CURRENTLY READING / NESTED REVIEWS / TBR LIST / CENTRAL REVIEW - LICHT GEOPTIMALISEERD) -->
   
-  <!-- Interactive Modals backdrop -->
-  <div id="modalBackdrop" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+  <!-- Interactive Modals backdrop: Veranderd van bg-black/80 naar een chique lichte havermelk frosted-glass sluier! -->
+  <div id="modalBackdrop" class="hidden fixed inset-0 z-50 bg-espresso/50 backdrop-blur-md flex items-center justify-center p-4">
     
     <!-- 1. Currently Reading / Log Update Modal -->
-    <div id="currentlyReadingModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4">
-      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+    <div id="currentlyReadingModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4 text-warmCream">
+      <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <h3 class="text-lg font-bold text-accentGold">Boeklog Bijwerken</h3>
         <button onclick="closeModal()" class="text-stone-500 hover:text-warmCream text-2xl">&times;</button>
       </div>
       
       <!-- Boek info weergave in de pop-up -->
-      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-800">
-        <img id="modalBookCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-700" alt="Cover">
+      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-200">
+        <img id="modalBookCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-300" alt="Cover">
         <div class="min-w-0">
           <h4 id="modalBookTitleDisplay" class="font-bold text-sm text-warmCream truncate">Titel</h4>
-          <p id="modalBookAuthorDisplay" class="text-xs text-stone-400 truncate">Auteur</p>
+          <p id="modalBookAuthorDisplay" class="text-xs text-stone-500 truncate">Auteur</p>
         </div>
       </div>
 
@@ -396,25 +396,25 @@
         
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1 text-stone-400">Begindatum</label>
-            <input type="date" id="logStartDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+            <label class="block text-xs font-semibold mb-1 text-stone-500">Begindatum</label>
+            <input type="date" id="logStartDate" class="w-full bg-espresso border border-stone-300/80 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
-            <input type="date" id="logEndDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+            <label class="block text-xs font-semibold mb-1 text-stone-500">Einddatum</label>
+            <input type="date" id="logEndDate" class="w-full bg-espresso border border-stone-300/80 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
           </div>
         </div>
         
         <div class="grid grid-cols-2 gap-3 items-center">
           <div>
-            <label class="block text-xs font-semibold mb-1 text-stone-400">Leesstatus</label>
-            <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+            <label class="block text-xs font-semibold mb-1 text-stone-500">Leesstatus</label>
+            <select id="logStatus" class="w-full bg-espresso border border-stone-300/80 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
               <option value="Bezig">Bezig</option>
               <option value="Gelezen">Gelezen</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-2 text-stone-400">Rating</label>
+            <label class="block text-xs font-semibold mb-2 text-stone-500">Rating</label>
             <div class="flex space-x-1 text-xl cursor-pointer select-none" id="starContainer">
               <!-- Gesterde rating via JS -->
             </div>
@@ -423,8 +423,8 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Mijn Review / Notities</label>
-          <textarea id="logReview" rows="3" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold" placeholder="Wat vind je van het boek?"></textarea>
+          <label class="block text-xs font-semibold mb-1 text-stone-500">Mijn Review / Notities</label>
+          <textarea id="logReview" rows="3" class="w-full bg-espresso border border-stone-300/80 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold" placeholder="Wat vind je van het boek?"></textarea>
         </div>
 
         <button type="submit" id="logSubmitBtn" class="w-full bg-accentGold text-espresso font-bold py-2.5 rounded-lg">
@@ -434,8 +434,8 @@
     </div>
 
     <!-- 2. Challenge target 12-slot modal -->
-    <div id="challengeGridModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4">
-      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+    <div id="challengeGridModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4 text-warmCream">
+      <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <h3 class="text-lg font-bold text-accentGold">Challenge Voortgang 2026</h3>
         <button onclick="closeModal()" class="text-stone-500 hover:text-warmCream text-2xl">&times;</button>
       </div>
@@ -444,31 +444,31 @@
       </div>
     </div>
 
-    <!-- 3. Nested popup for challenge reviews (Met hoog contrast) -->
-    <div id="nestedReviewModal" class="hidden bg-espresso border border-stone-800 w-full max-w-sm rounded-xl shadow-2xl p-5 space-y-3 relative z-50">
-      <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+    <!-- 3. Nested popup for challenge reviews (Contrast hersteld voor lichte modus) -->
+    <div id="nestedReviewModal" class="hidden bg-espresso border border-stone-200 w-full max-w-sm rounded-xl shadow-2xl p-5 space-y-3 relative z-50">
+      <div class="flex justify-between items-center border-b border-stone-200 pb-2">
         <h4 id="nestedTitle" class="font-bold text-accentGold text-sm">Review details</h4>
         <button onclick="closeNestedModal()" class="text-stone-500 hover:text-warmCream text-xl">&times;</button>
       </div>
       <div class="space-y-2 text-xs text-warmCream">
-        <p><strong class="text-stone-500 font-semibold">Auteur:</strong> <span id="nestedAuthor"></span></p>
-        <p><strong class="text-stone-500 font-semibold">Leesperiode:</strong> <span id="nestedDates"></span></p>
-        <p><strong class="text-stone-500 font-semibold">Beoordeling:</strong> <span id="nestedRating" class="text-accentGold"></span></p>
-        <div class="bg-cafeCard p-3 rounded-lg border border-stone-800 mt-2">
-          <p class="font-semibold text-stone-500">Recensie:</p>
+        <p><strong class="text-stone-500 font-bold">Auteur:</strong> <span id="nestedAuthor"></span></p>
+        <p><strong class="text-stone-500 font-bold">Leesperiode:</strong> <span id="nestedDates"></span></p>
+        <p><strong class="text-stone-500 font-bold">Beoordeling:</strong> <span id="nestedRating" class="text-accentGold"></span></p>
+        <div class="bg-cafeCard p-3 rounded-lg border border-stone-200 mt-2">
+          <p class="font-bold text-stone-500">Recensie:</p>
           <p id="nestedReviewBody" class="text-warmCream mt-1 italic whitespace-pre-wrap"></p>
         </div>
       </div>
     </div>
 
     <!-- 4. TBR List Modal -->
-    <div id="tbrListModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4">
-      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+    <div id="tbrListModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4 text-warmCream">
+      <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <div>
           <h3 class="text-lg font-bold text-accentGold">Mijn TBR-Lijst</h3>
-          <p class="text-xs text-stone-400">Klik op een boek om het te starten of in te plannen</p>
+          <p class="text-xs text-stone-500">Klik op een boek om het te starten of in te plannen</p>
         </div>
-        <button onclick="closeModal()" class="text-stone-400 hover:text-warmCream text-2xl">&times;</button>
+        <button onclick="closeModal()" class="text-stone-500 hover:text-warmCream text-2xl">&times;</button>
       </div>
       <div id="tbrListGrid" class="grid grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-1">
         <!-- Dynamically populated with TBR books -->
@@ -476,18 +476,18 @@
     </div>
 
     <!-- 5. TBR Action Detail Modal -->
-    <div id="tbrActionModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4 relative z-50">
-      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+    <div id="tbrActionModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4 relative z-50 text-warmCream">
+      <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <h3 class="text-base font-bold text-accentGold">Boek Beheren</h3>
-        <button onclick="closeTbrActionModal()" class="text-stone-400 hover:text-warmCream text-xl">&times;</button>
+        <button onclick="closeTbrActionModal()" class="text-stone-500 hover:text-warmCream text-xl">&times;</button>
       </div>
       
       <!-- Mini Book details -->
-      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-800">
-        <img id="tbrActionCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-700" alt="Cover">
+      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-200">
+        <img id="tbrActionCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-300" alt="Cover">
         <div class="min-w-0">
           <h4 id="tbrActionTitle" class="font-bold text-sm text-warmCream truncate">Titel</h4>
-          <p id="tbrActionAuthor" class="text-xs text-stone-400 truncate">Auteur</p>
+          <p id="tbrActionAuthor" class="text-xs text-stone-500 truncate">Auteur</p>
         </div>
       </div>
 
@@ -498,10 +498,10 @@
         </button>
         
         <!-- Option B: Plan for Month -->
-        <div class="border-t border-stone-800 pt-3 space-y-2">
-          <label class="block text-xs font-semibold text-stone-400">Inplannen voor Leesmaand</label>
+        <div class="border-t border-stone-200 pt-3 space-y-2">
+          <label class="block text-xs font-semibold text-stone-500">Inplannen voor Leesmaand</label>
           <div class="flex space-x-2">
-            <select id="tbrActionMonthSelect" class="flex-1 bg-espresso border border-stone-800 rounded-lg p-2 text-xs text-warmCream focus:outline-none focus:border-accentGold">
+            <select id="tbrActionMonthSelect" class="flex-1 bg-espresso border border-stone-300/80 rounded-lg p-2 text-xs text-warmCream focus:outline-none focus:border-accentGold">
               <option value="Jaarlijst">Jaarlijst (Geen specifieke maand)</option>
               <option value="Jaarlijst, januari">Jaarlijst, januari</option>
               <option value="Jaarlijst, februari">Jaarlijst, februari</option>
@@ -516,7 +516,7 @@
               <option value="Jaarlijst, november">Jaarlijst, november</option>
               <option value="Jaarlijst, december">Jaarlijst, december</option>
             </select>
-            <button onclick="assignMonthFromTbrList()" class="bg-stone-800 hover:bg-stone-700 text-warmCream border border-stone-700 px-3 py-2 rounded-lg text-xs transition-all">
+            <button onclick="assignMonthFromTbrList()" class="bg-stone-800 hover:bg-stone-700 text-warmCream border border-stone-300 px-3 py-2 rounded-lg text-xs transition-all">
               Plannen
             </button>
           </div>
@@ -524,22 +524,22 @@
       </div>
     </div>
 
-    <!-- 6. Central Review Modal (Tijdmachine pop-up met hoog contrast) -->
-    <div id="centralReviewModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4 relative z-50">
-      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+    <!-- 6. Central Review Modal (Tijdmachine pop-up met hoog contrast en lichte achtergrond) -->
+    <div id="centralReviewModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4 relative z-50">
+      <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <h3 id="centralReviewTitle" class="text-lg font-bold text-accentGold truncate">Titel</h3>
         <button onclick="closeModal()" class="text-stone-500 hover:text-warmCream text-2xl">&times;</button>
       </div>
       <div class="flex space-x-4 items-start">
-        <img id="centralReviewCover" src="" class="w-20 h-28 object-cover rounded shadow-md border border-stone-800 flex-shrink-0" alt="Cover">
+        <img id="centralReviewCover" src="" class="w-20 h-28 object-cover rounded shadow-md border border-stone-300 flex-shrink-0" alt="Cover">
         <!-- text-warmCream is nu espressokleur geworden voor perfecte leesbaarheid -->
         <div class="space-y-1.5 text-xs text-warmCream min-w-0">
-          <p><strong class="text-stone-500 font-semibold">Auteur:</strong> <span id="centralReviewAuthor"></span></p>
-          <p><strong class="text-stone-500 font-semibold">Leesperiode:</strong> <span id="centralReviewDates"></span></p>
-          <p><strong class="text-stone-500 font-semibold">Beoordeling:</strong> <span id="centralReviewRating" class="text-accentGold"></span></p>
+          <p><strong class="text-stone-500 font-bold">Auteur:</strong> <span id="centralReviewAuthor"></span></p>
+          <p><strong class="text-stone-500 font-bold">Leesperiode:</strong> <span id="centralReviewDates"></span></p>
+          <p><strong class="text-stone-500 font-bold">Beoordeling:</strong> <span id="centralReviewRating" class="text-accentGold"></span></p>
         </div>
       </div>
-      <div class="bg-espresso p-4 rounded-xl border border-stone-800 shadow-inner">
+      <div class="bg-espresso p-4 rounded-xl border border-stone-200 shadow-inner">
         <p class="text-xs font-semibold text-stone-500 mb-1">Mijn Recensie / Notities</p>
         <p id="centralReviewBody" class="text-xs text-warmCream italic whitespace-pre-wrap leading-relaxed"></p>
       </div>
@@ -548,7 +548,7 @@
   </div> <!-- HIER SLUIT DE MODALBACKDROP CORRECT AF -->
 
   <!-- Bottom Navigation Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 border-t border-stone-800/90 bg-espresso/95 backdrop-blur-md py-4 flex justify-around items-center z-40">
+  <nav class="fixed bottom-0 left-0 right-0 border-t border-stone-200 bg-espresso/95 backdrop-blur-md py-4 flex justify-around items-center z-40">
     <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-accentGold transition-all">
       <span class="text-xl">🏠</span><span class="text-[10px] font-bold">Home</span>
     </button>
