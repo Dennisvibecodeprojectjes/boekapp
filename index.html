@@ -117,9 +117,15 @@
 
       <!-- Laatst Toegevoegde Boeken -->
       <section class="space-y-3">
-        <div>
-          <h2 class="text-lg font-bold tracking-tight text-accentGold">Laatst Toegevoegd</h2>
-          <p class="text-xs text-stone-400">De nieuwste aanwinsten in je lounge bibliotheek</p>
+        <div class="flex justify-between items-end">
+          <div>
+            <h2 class="text-lg font-bold tracking-tight text-accentGold">Laatst Toegevoegd</h2>
+            <p class="text-xs text-stone-400">De nieuwste aanwinsten in je lounge bibliotheek</p>
+          </div>
+          <button onclick="openTbrListModal()" class="text-xs text-accentGold hover:text-amber-500 font-bold flex items-center space-x-1 transition-all">
+            <span>Volledige TBR-Lijst</span>
+            <span>➔</span>
+          </button>
         </div>
         <div class="relative pt-12 pb-2 px-6 rounded-2xl bg-espresso/60 border border-stone-900/80 shadow-inner">
           <div id="recentShelf" class="grid grid-cols-5 gap-3 h-40 items-end relative z-10">
@@ -274,8 +280,8 @@
             <label class="block text-xs font-semibold mb-1 text-stone-400">Status</label>
             <select id="formStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
               <option value="TBR">TBR</option>
-              <option value="Reading">Bezig</option>
-              <option value="Finished">Gelezen</option>
+              <option value="Bezig">Bezig</option>
+              <option value="Gelezen">Gelezen</option>
             </select>
           </div>
           <div>
@@ -309,7 +315,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold mb-1 text-stone-400">TBR Lijst</label>
-            <input type="text" id="formTbrLijst" placeholder="Bijv. Jaarlijst, mei" class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
+            <input type="text" id="formTbrLijst" placeholder="Bijv. Jaarlijst, juli" class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1 text-stone-400">Publicatiejaar</label>
@@ -322,7 +328,7 @@
           <input type="url" id="formCoverUrl" placeholder="https://..." class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
         </div>
 
-        <div id="coverPreviewContainer" class="hidden flex items-center space-x-3 p-2 bg-espresso rounded-lg border border-stone-800 shadow-inner">
+        <div id="coverPreviewContainer" class="hidden flex items-center space-x-3 p-2 bg-espresso rounded-lg border border-stone-700">
           <img id="coverPreviewImg" src="" alt="Cover preview" class="w-10 h-14 object-cover rounded shadow-md border border-stone-700">
           <div class="text-[11px] text-stone-400">
             <p class="font-semibold text-warmCream">Cover Voorbeeld</p>
@@ -354,7 +360,7 @@
 
   </main>
 
-  <!-- MODALS SYSTEM (CHALLENGE / CURRENTLY READING / NESTED REVIEWS) -->
+  <!-- MODALS SYSTEM (CHALLENGE / CURRENTLY READING / NESTED REVIEWS / TBR LIST / CENTRAL REVIEW) -->
   
   <!-- Interactive Modals backdrop -->
   <div id="modalBackdrop" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
@@ -365,39 +371,51 @@
         <h3 class="text-lg font-bold text-accentGold">Boeklog Bijwerken</h3>
         <button onclick="closeModal()" class="text-stone-400 hover:text-warmCream text-2xl">&times;</button>
       </div>
+      
+      <!-- Boek info weergave in de pop-up -->
+      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-800">
+        <img id="modalBookCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-700" alt="Cover">
+        <div class="min-w-0">
+          <h4 id="modalBookTitleDisplay" class="font-bold text-sm text-warmCream truncate">Titel</h4>
+          <p id="modalBookAuthorDisplay" class="text-xs text-stone-400 truncate">Auteur</p>
+        </div>
+      </div>
+
       <form id="logUpdateForm" onsubmit="handleLogUpdateSubmit(event)" class="space-y-4 text-sm">
         <input type="hidden" id="logBookTitle">
         <input type="hidden" id="logBookAuthor">
         
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Begindatum</label>
-          <input type="date" id="logStartDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
-          <input type="date" id="logEndDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Begindatum</label>
+            <input type="date" id="logStartDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Einddatum</label>
+            <input type="date" id="logEndDate" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+          </div>
         </div>
         
-        <!-- Interactive 5-star Picker -->
-        <div>
-          <label class="block text-xs font-semibold mb-2 text-stone-400">Rating</label>
-          <div class="flex space-x-2 text-2xl cursor-pointer select-none" id="starContainer">
-            <!-- Rendered by JS -->
+        <div class="grid grid-cols-2 gap-3 items-center">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-stone-400">Leesstatus</label>
+            <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
+              <option value="Bezig">Bezig</option>
+              <option value="Gelezen">Gelezen</option>
+            </select>
           </div>
-          <input type="hidden" id="logRatingVal" value="0">
+          <div>
+            <label class="block text-xs font-semibold mb-2 text-stone-400">Rating</label>
+            <div class="flex space-x-1 text-xl cursor-pointer select-none" id="starContainer">
+              <!-- Gesterde rating via JS -->
+            </div>
+            <input type="hidden" id="logRatingVal" value="0">
+          </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Leesstatus</label>
-         <select id="logStatus" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold">
-  <option value="Bezig">Bezig</option>
-  <option value="Gelezen">Gelezen</option>
-</select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold mb-1 text-stone-400">Mijn Review</label>
-          <textarea id="logReview" rows="3" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream"></textarea>
+          <label class="block text-xs font-semibold mb-1 text-stone-400">Mijn Review / Notities</label>
+          <textarea id="logReview" rows="3" class="w-full bg-espresso border border-stone-800 rounded-lg p-2 text-warmCream focus:outline-none focus:border-accentGold" placeholder="Wat vind je van het boek?"></textarea>
         </div>
 
         <button type="submit" id="logSubmitBtn" class="w-full bg-accentGold text-espresso font-bold py-2.5 rounded-lg">
@@ -434,6 +452,89 @@
       </div>
     </div>
 
+    <!-- 4. TBR List Modal (NIEUW) -->
+    <div id="tbrListModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+        <div>
+          <h3 class="text-lg font-bold text-accentGold">Mijn TBR-Lijst</h3>
+          <p class="text-xs text-stone-400">Klik op een boek om het te starten of in te plannen</p>
+        </div>
+        <button onclick="closeModal()" class="text-stone-400 hover:text-warmCream text-2xl">&times;</button>
+      </div>
+      <div id="tbrListGrid" class="grid grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-1">
+        <!-- Dynamically populated with TBR books -->
+      </div>
+    </div>
+
+    <!-- 5. TBR Action Detail Modal (NIEUW) -->
+    <div id="tbrActionModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4 relative z-50 animate-fade-in">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+        <h3 class="text-base font-bold text-accentGold">Boek Beheren</h3>
+        <button onclick="closeTbrActionModal()" class="text-stone-400 hover:text-warmCream text-xl">&times;</button>
+      </div>
+      
+      <!-- Mini Book details -->
+      <div class="flex items-center space-x-3 bg-espresso p-3 rounded-lg border border-stone-800">
+        <img id="tbrActionCover" src="" class="w-10 h-14 object-cover rounded shadow border border-stone-700" alt="Cover">
+        <div class="min-w-0">
+          <h4 id="tbrActionTitle" class="font-bold text-sm text-warmCream truncate">Titel</h4>
+          <p id="tbrActionAuthor" class="text-xs text-stone-400 truncate">Auteur</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Option A: Start Reading -->
+        <button onclick="startReadingFromTbrList()" class="w-full bg-accentGold hover:bg-amber-700 text-espresso font-bold py-2.5 rounded-lg text-xs transition-all shadow-md">
+          📖 Nu starten met lezen (Status naar Bezig)
+        </button>
+        
+        <!-- Option B: Plan for Month -->
+        <div class="border-t border-stone-800 pt-3 space-y-2">
+          <label class="block text-xs font-semibold text-stone-400">Inplannen voor Leesmaand</label>
+          <div class="flex space-x-2">
+            <select id="tbrActionMonthSelect" class="flex-1 bg-espresso border border-stone-800 rounded-lg p-2 text-xs text-warmCream focus:outline-none focus:border-accentGold">
+              <option value="Jaarlijst">Jaarlijst (Geen specifieke maand)</option>
+              <option value="Jaarlijst, januari">Jaarlijst, januari</option>
+              <option value="Jaarlijst, februari">Jaarlijst, februari</option>
+              <option value="Jaarlijst, maart">Jaarlijst, maart</option>
+              <option value="Jaarlijst, april">Jaarlijst, april</option>
+              <option value="Jaarlijst, mei">Jaarlijst, mei</option>
+              <option value="Jaarlijst, juni">Jaarlijst, juni</option>
+              <option value="Jaarlijst, juli">Jaarlijst, juli</option>
+              <option value="Jaarlijst, augustus">Jaarlijst, augustus</option>
+              <option value="Jaarlijst, september">Jaarlijst, september</option>
+              <option value="Jaarlijst, oktober">Jaarlijst, oktober</option>
+              <option value="Jaarlijst, november">Jaarlijst, november</option>
+              <option value="Jaarlijst, december">Jaarlijst, december</option>
+            </select>
+            <button onclick="assignMonthFromTbrList()" class="bg-stone-800 hover:bg-stone-700 text-warmCream border border-stone-700 px-3 py-2 rounded-lg text-xs transition-all">
+              Plannen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Central Review Modal (NIEUW voor Tijdmachine pop-up) -->
+    <div id="centralReviewModal" class="hidden bg-cafeCard border border-stone-800 w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-4 relative z-50">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
+        <h3 id="centralReviewTitle" class="text-lg font-bold text-accentGold truncate">Titel</h3>
+        <button onclick="closeModal()" class="text-stone-400 hover:text-warmCream text-2xl">&times;</button>
+      </div>
+      <div class="flex space-x-4 items-start">
+        <img id="centralReviewCover" src="" class="w-20 h-28 object-cover rounded shadow-md border border-stone-800 flex-shrink-0" alt="Cover">
+        <div class="space-y-1.5 text-xs text-stone-300 min-w-0">
+          <p><strong>Auteur:</strong> <span id="centralReviewAuthor"></span></p>
+          <p><strong>Leesperiode:</strong> <span id="centralReviewDates"></span></p>
+          <p><strong>Beoordeling:</strong> <span id="centralReviewRating" class="text-accentGold"></span></p>
+        </div>
+      </div>
+      <div class="bg-espresso p-4 rounded-xl border border-stone-900 shadow-inner">
+        <p class="text-xs font-semibold text-stone-400 mb-1">Mijn Recensie / Notities</p>
+        <p id="centralReviewBody" class="text-xs text-stone-300 italic whitespace-pre-wrap leading-relaxed"></p>
+      </div>
+    </div>
+
   </div>
 
   <!-- Bottom Navigation Bar -->
@@ -455,8 +556,7 @@
   <!-- JS CONTROLLERS & ENGINE -->
   <script>
     // --- APP STATE & KEYS ---
-const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2DI807MnjJNqBfDhWlcxuRQ3f21ywSIYC4vcB2nHqT4Dw4bN_J5LavQ/exec';
-
+    const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2DI807MnjJNqBfDhWlcxuRQ3f21ywSIYC4vcB2nHqT4Dw4bN_J5LavQ/exec';
     const API_TOKEN = 'BAv1Juni';
 
     let appState = {
@@ -468,6 +568,7 @@ const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2D
     let activeSeriesFilter = 'all';
     let activeWrappedView = 'algemeen';
     let chartInstances = {};
+    let selectedTbrBook = null; // Opslag voor in te plannen TBR-boek
 
     document.addEventListener("DOMContentLoaded", () => {
       buildYearSelect();
@@ -557,55 +658,270 @@ const GAS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxOBvVjoq3kewH2D
     }
 
     // --- TAB 1: HOME CONTROLLER & SCHEDULING ---
+    
+    // 1. Nu Aan Het Lezen (Currently Reading) met TBR List doorlinken
+    function renderCurrentlyReading() {
+      const container = document.getElementById('currentlyReadingWidget');
+      
+      // Zoek naar boeken met de status "Bezig" (ongeacht hoofdlettergebruik)
+      const readingBooks = appState.library.filter(b => b.status && b.status.toLowerCase().trim() === 'bezig');
 
-function renderCurrentlyReading() {
-  const container = document.getElementById('currentlyReadingWidget');
-  
-  // Zoek specifiek naar boeken met de status "Bezig" (ongeacht hoofdletters of spaties)
-  const readingBooks = appState.library.filter(b => {
-    const status = String(b.status || '').toLowerCase().trim();
-    return status === 'bezig';
-  });
+      if (readingBooks.length === 0) {
+        container.innerHTML = `
+          <div class="flex items-center justify-between" onclick="event.stopPropagation()">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-24 rounded border border-dashed border-stone-700 flex items-center justify-center text-3xl bg-espresso">🪑</div>
+              <div class="flex-1">
+                <h3 class="font-bold text-sm text-stone-300">Geen actief leesboek</h3>
+                <p class="text-xs text-stone-500 mt-1">Selecteer een boek uit je TBR-lijst of voeg een nieuwe toe.</p>
+              </div>
+            </div>
+            
+            <div class="flex flex-col gap-2">
+              <button onclick="openTbrListModal()" class="bg-accentGold hover:bg-amber-700 text-espresso font-bold px-4 py-2.5 rounded-lg text-xs transition-all shadow-md whitespace-nowrap">
+                Kies van TBR-Lijst
+              </button>
+              <button onclick="switchTab('newbook')" class="bg-stone-800 hover:bg-stone-700 text-warmCream border border-stone-700 px-4 py-2 rounded-lg text-xs transition-all whitespace-nowrap text-center">
+                + Nieuw Boek
+              </button>
+            </div>
+          </div>
+        `;
+        container.onclick = null; // Voorkom dat er een modal opent bij lege klik
+        return;
+      }
 
-  if (readingBooks.length === 0) {
-    container.innerHTML = `
-      <div class="flex items-center space-x-4">
-        <div class="w-16 h-24 rounded border border-dashed border-stone-700 flex items-center justify-center text-3xl">🪑</div>
-        <div class="flex-1">
-          <h3 class="font-bold text-sm text-stone-300">Geen actief leesboek</h3>
-          <p class="text-xs text-stone-500 mt-1">Kies een boek uit je TBR-kast of voeg een nieuw boek toe om te starten.</p>
+      const activeBook = readingBooks[0];
+      const cover = activeBook.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+      const pages = activeBook.bladzijden ? `${activeBook.bladzijden} pagina's` : 'Aantal bladzijden onbekend';
+
+      container.innerHTML = `
+        <div class="flex items-center space-x-4">
+          <img src="${cover}" alt="Book cover" class="w-16 h-24 object-cover rounded shadow-md border border-stone-800">
+          <div class="flex-1 space-y-1 min-w-0">
+            <span class="inline-block bg-accentGold/20 text-accentGold text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Nu aan het Lezen</span>
+            <h3 class="font-bold text-base truncate text-warmCream">${activeBook.titel}</h3>
+            <p class="text-xs text-stone-400 truncate">${activeBook.auteur}</p>
+            <p class="text-[11px] text-stone-500">${pages}</p>
+          </div>
+          <span class="text-2xl text-accentGold">✏️</span>
         </div>
-      </div>
-    `;
-    container.onclick = () => switchTab('newbook');
-    return;
-  }
+      `;
 
-  const activeBook = readingBooks[0];
-  const cover = activeBook.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
-  const pages = activeBook.bladzijden ? `${activeBook.bladzijden} pagina's` : 'Aantal bladzijden onbekend';
+      container.onclick = () => openCurrentlyReadingModal(activeBook);
+    }
 
-  container.innerHTML = `
-    <div class="flex items-center space-x-4">
-      <img src="${cover}" alt="Book cover" class="w-16 h-24 object-cover rounded shadow-md border border-stone-800">
-      <div class="flex-1 space-y-1 min-w-0">
-        <span class="inline-block bg-accentGold/20 text-accentGold text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Nu aan het Lezen</span>
-        <h3 class="font-bold text-base truncate text-warmCream">${activeBook.titel}</h3>
-        <p class="text-xs text-stone-400 truncate">${activeBook.auteur}</p>
-        <p class="text-[11px] text-stone-500">${pages}</p>
-      </div>
-      <span class="text-2xl text-accentGold">✏️</span>
-    </div>
-  `;
+    // --- TBR-Lijst Modals Openen & Genereren ---
+    function openTbrListModal() {
+      document.getElementById('modalBackdrop').classList.remove('hidden');
+      document.getElementById('tbrListModal').classList.remove('hidden');
 
-  container.onclick = () => openCurrentlyReadingModal(activeBook);
-}
+      const grid = document.getElementById('tbrListGrid');
+      grid.innerHTML = "";
 
-    // 2. Challenge Target & Modals
+      // Filter boeken met status TBR
+      const tbrBooks = appState.library.filter(b => b.status && b.status.toLowerCase().trim() === 'tbr');
+
+      if (tbrBooks.length === 0) {
+        grid.innerHTML = `<p class="text-xs text-stone-500 col-span-2 text-center py-6">Je TBR-lijst is momenteel leeg. Voeg een boek toe onder 'Nieuw Boek'!</p>`;
+        return;
+      }
+
+      tbrBooks.forEach(book => {
+        const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+        const card = document.createElement('div');
+        card.className = "bg-espresso border border-stone-800 p-2 rounded-xl flex items-center space-x-3 hover:border-accentGold/40 transition-all cursor-pointer shadow-md";
+        card.innerHTML = `
+          <img src="${cover}" class="w-10 h-14 object-cover rounded border border-stone-800 flex-shrink-0" alt="Cover">
+          <div class="min-w-0 flex-1">
+            <h4 class="font-bold text-xs text-warmCream truncate" title="${book.titel}">${book.titel}</h4>
+            <p class="text-[10px] text-stone-400 truncate">${book.auteur}</p>
+            <p class="text-[9px] text-accentGold truncate mt-0.5">${book.tbr_lijst || 'Nog niet ingepland'}</p>
+          </div>
+        `;
+        card.onclick = () => openTbrActionModal(book);
+        grid.appendChild(card);
+      });
+    }
+
+    function openTbrActionModal(book) {
+      selectedTbrBook = book;
+      document.getElementById('tbrActionModal').classList.remove('hidden');
+      document.getElementById('tbrActionTitle').innerText = book.titel;
+      document.getElementById('tbrActionAuthor').innerText = book.auteur;
+      document.getElementById('tbrActionCover').src = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+      
+      // Selecteer standaard de reeds opgeslagen TBR lijst waarde of 'Jaarlijst'
+      document.getElementById('tbrActionMonthSelect').value = book.tbr_lijst || "Jaarlijst";
+    }
+
+    function closeTbrActionModal() {
+      document.getElementById('tbrActionModal').classList.add('hidden');
+      selectedTbrBook = null;
+    }
+
+    // --- Actie: Start met lezen vanaf TBR lijst ---
+    function startReadingFromTbrList() {
+      if (!selectedTbrBook) return;
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      const requestPayload = {
+        token: API_TOKEN,
+        titel: selectedTbrBook.titel,
+        auteur: selectedTbrBook.auteur,
+        status: 'Bezig',
+        begindatum: todayStr,
+        einddatum: selectedTbrBook.einddatum || '',
+        rating: selectedTbrBook.rating || '',
+        categorie: selectedTbrBook.categorie || '',
+        genre: selectedTbrBook.genre || '',
+        publicatiejaar: selectedTbrBook.publicatiejaar || '',
+        bladzijden: selectedTbrBook.bladzijden || '',
+        isbn: selectedTbrBook.isbn || '',
+        serienaam: selectedTbrBook.serienaam || '',
+        serie_deel: selectedTbrBook.serie_deel || '',
+        cover_url: selectedTbrBook.cover_url || '',
+        tbr_lijst: selectedTbrBook.tbr_lijst || '',
+        review: selectedTbrBook.review || ''
+      };
+
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.innerText = "Bijwerken...";
+
+      fetch(GAS_WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestPayload)
+      })
+      .then(() => {
+        alert(`Je bent begonnen in "${selectedTbrBook.titel}"! Veel plezier.`);
+        closeModal();
+        fetchLibraryData();
+      })
+      .catch(err => alert("Fout bij starten boek: " + err.message));
+    }
+
+    // --- Actie: Inplannen voor leesmaand vanaf TBR lijst ---
+    function assignMonthFromTbrList() {
+      if (!selectedTbrBook) return;
+      const chosenMonth = document.getElementById('tbrActionMonthSelect').value;
+
+      const requestPayload = {
+        token: API_TOKEN,
+        titel: selectedTbrBook.titel,
+        auteur: selectedTbrBook.auteur,
+        status: selectedTbrBook.status || 'TBR',
+        begindatum: selectedTbrBook.begindatum || '',
+        einddatum: selectedTbrBook.einddatum || '',
+        rating: selectedTbrBook.rating || '',
+        categorie: selectedTbrBook.categorie || '',
+        genre: selectedTbrBook.genre || '',
+        publicatiejaar: selectedTbrBook.publicatiejaar || '',
+        bladzijden: selectedTbrBook.bladzijden || '',
+        isbn: selectedTbrBook.isbn || '',
+        serienaam: selectedTbrBook.serienaam || '',
+        serie_deel: selectedTbrBook.serie_deel || '',
+        cover_url: selectedTbrBook.cover_url || '',
+        tbr_lijst: chosenMonth, // Slaat de geselecteerde leesmaand op
+        review: selectedTbrBook.review || ''
+      };
+
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.innerText = "Inplanen...";
+
+      fetch(GAS_WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestPayload)
+      })
+      .then(() => {
+        alert(`"${selectedTbrBook.titel}" succesvol ingepland voor: ${chosenMonth}!`);
+        closeModal();
+        fetchLibraryData();
+      })
+      .catch(err => alert("Fout bij inplanen: " + err.message));
+    }
+
+    // --- 2. Open de 'Nu aan het lezen' modal met boekgegevens ---
+    function openCurrentlyReadingModal(book) {
+      document.getElementById('modalBackdrop').classList.remove('hidden');
+      document.getElementById('currentlyReadingModal').classList.remove('hidden');
+      
+      document.getElementById('logBookTitle').value = book.titel;
+      document.getElementById('logBookAuthor').value = book.auteur;
+      document.getElementById('logStartDate').value = book.begindatum || '';
+      document.getElementById('logEndDate').value = book.einddatum || '';
+      document.getElementById('logStatus').value = book.status || 'Bezig';
+      document.getElementById('logReview').value = book.review || '';
+      
+      // Update de weergavegegevens van het boek in de modal
+      document.getElementById('modalBookTitleDisplay').innerText = book.titel;
+      document.getElementById('modalBookAuthorDisplay').innerText = book.auteur;
+      document.getElementById('modalBookCover').src = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+
+      const rating = Number(book.rating || 0);
+      setInteractiveRatingStars(rating);
+    }
+
+    // --- 3. Het logboek opslaan via POST (Gelezen status / Rating / Review) ---
+    function handleLogUpdateSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('logSubmitBtn');
+      btn.disabled = true;
+      btn.innerText = "Lounge aan het bijwerken...";
+
+      // Haal het originele boek op om geen velden te verliezen
+      const original = appState.library.find(b => 
+        b.titel.toLowerCase().trim() === document.getElementById('logBookTitle').value.toLowerCase().trim() &&
+        b.auteur.toLowerCase().trim() === document.getElementById('logBookAuthor').value.toLowerCase().trim()
+      ) || {};
+
+      const requestPayload = {
+        token: API_TOKEN,
+        titel: document.getElementById('logBookTitle').value,
+        auteur: document.getElementById('logBookAuthor').value,
+        status: document.getElementById('logStatus').value,
+        rating: document.getElementById('logRatingVal').value,
+        begindatum: document.getElementById('logStartDate').value,
+        einddatum: document.getElementById('logEndDate').value,
+        review: document.getElementById('logReview').value,
+        // Behoud alle andere data
+        categorie: original.categorie || '',
+        genre: original.genre || '',
+        publicatiejaar: original.publicatiejaar || '',
+        bladzijden: original.bladzijden || '',
+        isbn: original.isbn || '',
+        serienaam: original.serienaam || '',
+        serie_deel: original.serie_deel || '',
+        cover_url: original.cover_url || '',
+        tbr_lijst: original.tbr_lijst || ''
+      };
+
+      fetch(GAS_WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestPayload)
+      })
+      .then(() => {
+        alert("Boek succesvol bijgewerkt!");
+        closeModal();
+        fetchLibraryData();
+      })
+      .catch(err => alert("Fout: " + err.message))
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerText = "Logboek Opslaan";
+      });
+    }
+
+    // --- 4. Challenge voortgang berekenen met Gelezen-status ---
     function renderChallengeProgress() {
       const challengeTitles = appState.challenge || [];
       const finishedChallengeBooks = appState.library.filter(b => 
-        (b.status === 'Finished' || b.status === 'Gelezen') && 
+        b.status && (b.status.toLowerCase().trim() === 'gelezen') && 
         challengeTitles.some(title => String(b.titel).toLowerCase().trim() === String(title).toLowerCase().trim())
       );
 
@@ -617,49 +933,111 @@ function renderCurrentlyReading() {
       document.getElementById('challengeProgressText').innerText = `${count} van de ${target} boeken uitgelezen voor je 2026 challenge!`;
     }
 
-// 3. Horizontal Swiping Time Machine Carousel
+    // 3. Horizontal Swiping Time Machine Carousel (Met centrale pop-up integratie)
     function renderTimeMachine() {
-      const today = new Date();
-      const currentMonth = today.getMonth();
-      const currentDay = today.getDate();
-      const currentYear = today.getFullYear();
+      try {
+        const today = new Date();
+        const currentMonth = today.getMonth(); 
+        const currentDay = today.getDate();
+        const currentYear = today.getFullYear();
 
-      const matchedBooks = appState.library.filter(book => {
-        if (!book.einddatum) return false;
-        const endDateObj = new Date(book.einddatum);
-        if (isNaN(endDateObj)) return false;
-
-        return (
-          endDateObj.getDate() === currentDay &&
-          endDateObj.getMonth() === currentMonth &&
-          endDateObj.getFullYear() < currentYear
-        );
-      });
-
-      const section = document.getElementById('timeMachineSection');
-      const carousel = document.getElementById('timeMachineCarousel');
-      carousel.innerHTML = "";
-
-      if (matchedBooks.length > 0) {
-        section.classList.remove('hidden');
-        matchedBooks.forEach(book => {
-          const yearsAgo = currentYear - new Date(book.einddatum).getFullYear();
-          const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+        const matchedBooks = appState.library.filter(book => {
+          if (!book.einddatum) return false;
           
-          const card = document.createElement('div');
-          card.className = "flex-shrink-0 w-36 snap-center bg-cafeCard border border-stone-800 p-3 rounded-xl flex flex-col items-center space-y-2 shadow-lg";
-          card.innerHTML = `
-            <span class="text-[9px] uppercase font-bold text-accentGold tracking-widest text-center">Exact ${yearsAgo} jaar geleden!</span>
-            <img src="${cover}" class="w-20 h-28 object-cover rounded shadow border border-stone-800" alt="Cover">
-            <p class="text-[11px] font-bold text-center truncate w-full" title="${book.titel}">${book.titel}</p>
-          `;
-          carousel.appendChild(card);
+          const dateStr = String(book.einddatum).trim();
+          let bDay = null, bMonth = null, bYear = null;
+
+          // 1. Ontleed YYYY-MM-DD
+          const yyyymmdd = dateStr.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+          if (yyyymmdd) {
+            bYear = parseInt(yyyymmdd[1], 10);
+            bMonth = parseInt(yyyymmdd[2], 10) - 1; 
+            bDay = parseInt(yyyymmdd[3], 10);
+          }
+
+          // 2. Ontleed DD-MM-YYYY
+          const ddmmyyyy = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+          if (ddmmyyyy) {
+            bDay = parseInt(ddmmyyyy[1], 10);
+            bMonth = parseInt(ddmmyyyy[2], 10) - 1;
+            bYear = parseInt(ddmmyyyy[3], 10);
+          }
+
+          // Als het ontleden is mislukt, doe een veilige fallback
+          if (bDay === null || bMonth === null || bYear === null) {
+            const fallbackDate = new Date(dateStr);
+            if (isNaN(fallbackDate)) return false;
+            bDay = fallbackDate.getDate();
+            bMonth = fallbackDate.getMonth();
+            bYear = fallbackDate.getFullYear();
+          }
+
+          return (
+            bDay === currentDay &&
+            bMonth === currentMonth &&
+            bYear < currentYear
+          );
         });
-      } else {
-        section.classList.add('hidden');
+
+        const section = document.getElementById('timeMachineSection');
+        const carousel = document.getElementById('timeMachineCarousel');
+        carousel.innerHTML = "";
+
+        if (matchedBooks.length > 0) {
+          section.classList.remove('hidden');
+          matchedBooks.forEach(book => {
+            const dateStr = String(book.einddatum).trim();
+            
+            // Bereken de jaren geleden op een veilige, zelfstandige manier
+            let bookYear = null;
+            const matchYyyy = dateStr.match(/^(\d{4})/);
+            if (matchYyyy) bookYear = parseInt(matchYyyy[1], 10);
+            
+            const matchDdmmyyyy = dateStr.match(/(\d{4})$/);
+            if (matchDdmmyyyy && !bookYear) bookYear = parseInt(matchDdmmyyyy[1], 10);
+            
+            if (!bookYear) {
+              bookYear = new Date(dateStr).getFullYear() || currentYear;
+            }
+            
+            const yearsAgo = currentYear - bookYear;
+            const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+            
+            const card = document.createElement('div');
+            card.className = "flex-shrink-0 w-36 snap-center bg-cafeCard border border-stone-800 p-3 rounded-xl flex flex-col items-center space-y-2 shadow-lg cursor-pointer hover:border-accentGold/40 transition-all";
+            card.innerHTML = `
+              <span class="text-[9px] uppercase font-bold text-accentGold tracking-widest text-center">Exact ${yearsAgo} jaar geleden!</span>
+              <img src="${cover}" class="w-20 h-28 object-cover rounded shadow border border-stone-800" alt="Cover">
+              <p class="text-[11px] font-bold text-center truncate w-full" title="${book.titel}">${book.titel}</p>
+            `;
+            // BIJ KLIK: Open de nieuwe centrale recensie popup!
+            card.onclick = () => openCentralReviewModal(book);
+            carousel.appendChild(card);
+          });
+        } else {
+          section.classList.add('hidden');
+        }
+
+      } catch (err) {
+        alert("Fout in Time Machine: " + err.message + "\n\nStacktrace:\n" + err.stack);
       }
     }
-    
+
+    // --- 6. Centrale Recensie Pop-up (NIEUW voor Tijdmachine) ---
+    function openCentralReviewModal(book) {
+      document.getElementById('modalBackdrop').classList.remove('hidden');
+      document.getElementById('centralReviewModal').classList.remove('hidden');
+
+      document.getElementById('centralReviewTitle').innerText = book.titel;
+      document.getElementById('centralReviewAuthor').innerText = book.auteur;
+      document.getElementById('centralReviewCover').src = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
+      document.getElementById('centralReviewDates').innerText = `${book.begindatum || '?'} t/m ${book.einddatum || '?'}`;
+      
+      const rating = Number(book.rating || 0);
+      document.getElementById('centralReviewRating').innerText = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      document.getElementById('centralReviewBody').innerText = book.review || "Geen recensie of notities achtergelaten voor dit boek.";
+    }
+
     // 4. Curated Monthly Shelf
     function renderMonthlyShelf() {
       const today = new Date();
@@ -725,7 +1103,7 @@ function renderCurrentlyReading() {
           `;
         } else {
           wrapper.innerHTML = `
-            <div class="w-10 h-16 rounded border border-dashed border-stone-800 flex items-center justify-center text-xs text-stone-700">☕</div>
+            <div class="w-10 h-16 rounded border border-dashed border-stone-700 flex items-center justify-center text-xs text-stone-700">☕</div>
             <span class="text-[8px] text-stone-700 mt-1">Leeg</span>
           `;
         }
@@ -747,6 +1125,7 @@ function renderCurrentlyReading() {
       renderSeriesView();
     }
 
+    // --- 5. Series Tracker updaten met Gelezen-status ---
     function renderSeriesView() {
       const container = document.getElementById('seriesGrid');
       container.innerHTML = "";
@@ -765,19 +1144,19 @@ function renderCurrentlyReading() {
       if (activeSeriesFilter === 'bezig') {
         filteredKeys = filteredKeys.filter(key => {
           const books = seriesGroups[key];
-          const completedCount = books.filter(b => b.status === 'Finished' || b.status === 'Gelezen').length;
+          const completedCount = books.filter(b => b.status && b.status.toLowerCase().trim() === 'gelezen').length;
           return completedCount > 0 && completedCount < books.length;
         });
       } else if (activeSeriesFilter === 'niet-begonnen') {
         filteredKeys = filteredKeys.filter(key => {
           const books = seriesGroups[key];
-          const completedCount = books.filter(b => b.status === 'Finished' || b.status === 'Gelezen').length;
+          const completedCount = books.filter(b => b.status && b.status.toLowerCase().trim() === 'gelezen').length;
           return completedCount === 0;
         });
       } else if (activeSeriesFilter === 'voltooid') {
         filteredKeys = filteredKeys.filter(key => {
           const books = seriesGroups[key];
-          const completedCount = books.filter(b => b.status === 'Finished' || b.status === 'Gelezen').length;
+          const completedCount = books.filter(b => b.status && b.status.toLowerCase().trim() === 'gelezen').length;
           return completedCount === books.length;
         });
       }
@@ -791,7 +1170,7 @@ function renderCurrentlyReading() {
         const books = seriesGroups[seriesName];
         books.sort((a, b) => Number(a.serie_deel || 0) - Number(b.serie_deel || 0));
 
-        const completedCount = books.filter(b => b.status === 'Finished' || b.status === 'Gelezen').length;
+        const completedCount = books.filter(b => b.status && b.status.toLowerCase().trim() === 'gelezen').length;
         const percent = Math.round((completedCount / books.length) * 100);
 
         const card = document.createElement('div');
@@ -806,7 +1185,7 @@ function renderCurrentlyReading() {
           </div>
           <div class="text-xs space-y-2 mt-2">
             ${books.map(b => {
-              const read = b.status === 'Finished' || b.status === 'Gelezen';
+              const read = b.status && b.status.toLowerCase().trim() === 'gelezen';
               return `
                 <div class="flex justify-between items-center ${read ? 'opacity-30' : ''}">
                   <span class="truncate pr-2 ${read ? 'line-through' : ''}">Deel ${b.serie_deel || '?'}: ${b.titel}</span>
@@ -839,306 +1218,355 @@ function renderCurrentlyReading() {
       renderWrappedStats();
     }
 
+    // =========================================================================
+    // VEILIGE DATUM PARSERS (VOORKOMT INVALID DATE CRASHES DOOR REGIONALE FORMATEN)
+    // =========================================================================
+
+    function safeParseYear(dateVal) {
+      if (!dateVal) return null;
+      if (dateVal instanceof Date) return dateVal.getFullYear();
+      
+      const str = String(dateVal).trim();
+      
+      // 1. Check YYYY-MM-DD (Internationaal)
+      const yyyymmdd = str.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+      if (yyyymmdd) return parseInt(yyyymmdd[1], 10);
+      
+      // 2. Check DD-MM-YYYY (Nederlands)
+      const ddmmyyyy = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+      if (ddmmyyyy) return parseInt(ddmmyyyy[3], 10);
+
+      // Fallback naar standaard browser ontleding
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? null : d.getFullYear();
+    }
+
+    function safeParseMonth(dateVal) {
+      if (!dateVal) return 0;
+      if (dateVal instanceof Date) return dateVal.getMonth();
+
+      const str = String(dateVal).trim();
+      
+      // 1. Check YYYY-MM-DD
+      const yyyymmdd = str.match(/^\d{4}[-/](\d{1,2})[-/]\d{1,2}/);
+      if (yyyymmdd) return parseInt(yyyymmdd[1], 10) - 1; // 0-indexed maand
+      
+      // 2. Check DD-MM-YYYY
+      const ddmmyyyy = str.match(/^\d{1,2}[-/](\d{1,2})[-/]\d{4}/);
+      if (ddmmyyyy) return parseInt(ddmmyyyy[1], 10) - 1;
+
+      // Fallback
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? 0 : d.getMonth();
+    }
+
+
+    // =========================================================================
+    // HERSTELDE & FOUTBESTENDIGE STATISTIEKEN ENGINE (BOOK WRAPPED)
+    // =========================================================================
+
     function renderWrappedStats() {
-      const selectedYear = Number(document.getElementById('wrappedYearSelect').value);
-      const isGlobal = activeWrappedView === 'algemeen';
+      try {
+        const selectedYear = Number(document.getElementById('wrappedYearSelect').value) || new Date().getFullYear();
+        const isGlobal = activeWrappedView === 'algemeen';
 
-      // Boeken filteren
-      const finishedBooks = appState.library.filter(b => {
-        if (b.status !== 'Finished' && b.status !== 'Gelezen') return false;
-        if (!b.einddatum) return false;
-        if (isGlobal) return true;
+        // 1. Veilig filteren van de gelezen boeken (Type-beveiligd)
+        const finishedBooks = appState.library.filter(b => {
+          const status = String(b.status || '').toLowerCase().trim();
+          if (status !== 'gelezen') return false;
+          if (!b.einddatum) return false;
+          if (isGlobal) return true;
+          
+          const parsedYear = safeParseYear(b.einddatum);
+          return parsedYear === selectedYear;
+        });
+
+        const totalBooks = finishedBooks.length;
+        let totalPages = 0;
+        let ratingSum = 0;
+        let ratingCount = 0;
         
-        const parsedYear = new Date(b.einddatum).getFullYear();
-        return parsedYear === selectedYear;
-      });
+        const genreCounts = {};
+        const authorCounts = {};
+        const ratingDistribution = Array(5).fill(0);
+        const monthlyPages = Array(12).fill(0);
+        const genreRatings = {};
+        const scatterData = [];
+        let seriesCount = 0;
+        let standaloneCount = 0;
 
-      // 1. Bereken Core Metrics
-      const totalBooks = finishedBooks.length;
-      let totalPages = 0;
-      let ratingSum = 0;
-      let ratingCount = 0;
-      const genreCounts = {};
-      const authorCounts = {};
-      const ratingDistribution = Array(5).fill(0);
-      const monthlyPages = Array(12).fill(0);
-      const genreRatings = {};
-      const scatterData = [];
-      let seriesCount = 0;
-      let standaloneCount = 0;
-
-      finishedBooks.forEach(book => {
-        if (book.bladzijden) totalPages += Number(book.bladzijden);
-        
-        // Rating parsing
-        if (book.rating) {
-          const score = Number(book.rating);
-          ratingSum += score;
-          ratingCount++;
-          const idx = Math.min(4, Math.max(0, Math.floor(score) - 1));
-          ratingDistribution[idx]++;
-        }
-
-        // Genres counts
-        if (book.genre) {
-          const g = book.genre.trim();
-          genreCounts[g] = (genreCounts[g] || 0) + 1;
-          if (book.rating) {
-            if (!genreRatings[g]) genreRatings[g] = { sum: 0, count: 0 };
-            genreRatings[g].sum += Number(book.rating);
-            genreRatings[g].count++;
+        finishedBooks.forEach(book => {
+          // Pagina's optellen
+          if (book.bladzijden) {
+            totalPages += Number(book.bladzijden);
           }
-        }
-
-        // Authors counts
-        if (book.auteur) {
-          const a = book.auteur.trim();
-          authorCounts[a] = (authorCounts[a] || 0) + 1;
-        }
-
-        // Monthly stats parsing
-        if (book.einddatum) {
-          const date = new Date(book.einddatum);
-          if (!isNaN(date)) {
-            const m = date.getMonth();
-            monthlyPages[m] += Number(book.bladzijden || 0);
+          
+          // Beoordelingen verwerken
+          if (book.rating && !isNaN(book.rating)) {
+            const score = Number(book.rating);
+            ratingSum += score;
+            ratingCount++;
+            const idx = Math.min(4, Math.max(0, Math.floor(score) - 1));
+            ratingDistribution[idx]++;
           }
-        }
 
-        // Scatter Year parsing
-        if (book.einddatum && book.publicatiejaar) {
-          const rYear = new Date(book.einddatum).getFullYear();
-          const pYear = Number(book.publicatiejaar);
-          if (rYear && pYear) {
-            scatterData.push({ x: rYear, y: pYear });
-          }
-        }
-
-        // Series vs Standalone
-        if (book.serienaam && book.serienaam.trim() !== "") {
-          seriesCount++;
-        } else {
-          standaloneCount++;
-        }
-      });
-
-      const avgRating = ratingCount > 0 ? (ratingSum / ratingCount).toFixed(1) : "0.0";
-
-      document.getElementById('wrapTotalBooks').innerText = totalBooks;
-      document.getElementById('wrapTotalPages').innerText = totalPages;
-      document.getElementById('wrapAvgRating').innerText = avgRating;
-
-      // 2. Render Milestone Cards
-      const milestoneContainer = document.getElementById('milestoneCardsContainer');
-      milestoneContainer.innerHTML = "";
-
-      if (isGlobal) {
-        // Bereken "Meeste boeken in één jaar"
-        const booksByYear = {};
-        const ratingSumByYear = {};
-        const ratingCountByYear = {};
-
-        appState.library.forEach(b => {
-          if ((b.status === 'Finished' || b.status === 'Gelezen') && b.einddatum) {
-            const y = new Date(b.einddatum).getFullYear();
-            if (!isNaN(y)) {
-              booksByYear[y] = (booksByYear[y] || 0) + 1;
-              if (b.rating) {
-                if (!ratingSumByYear[y]) {
-                  ratingSumByYear[y] = 0;
-                  ratingCountByYear[y] = 0;
-                }
-                ratingSumByYear[y] += Number(b.rating);
-                ratingCountByYear[y]++;
+          // Genres tellen
+          if (book.genre) {
+            const g = String(book.genre).trim();
+            if (g !== "") {
+              genreCounts[g] = (genreCounts[g] || 0) + 1;
+              if (book.rating && !isNaN(book.rating)) {
+                if (!genreRatings[g]) genreRatings[g] = { sum: 0, count: 0 };
+                genreRatings[g].sum += Number(book.rating);
+                genreRatings[g].count++;
               }
             }
           }
-        });
 
-        let mostBooksYear = "-";
-        let maxBooks = 0;
-        for (const [y, cnt] of Object.entries(booksByYear)) {
-          if (cnt > maxBooks) {
-            maxBooks = cnt;
-            mostBooksYear = y;
-          }
-        }
-
-        let bestRatingYear = "-";
-        let maxAvgRating = 0;
-        for (const [y, sum] of Object.entries(ratingSumByYear)) {
-          const avg = sum / ratingCountByYear[y];
-          if (avg > maxAvgRating) {
-            maxAvgRating = avg;
-            bestRatingYear = y;
-          }
-        }
-
-        milestoneContainer.innerHTML = `
-          <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
-            <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Volume)</span>
-            <span class="text-lg font-bold text-accentGold mt-1">${mostBooksYear}</span>
-            <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen in één kalenderjaar: <strong class="text-warmCream">${maxBooks} stuks</strong></p>
-          </div>
-          <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
-            <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Kwaliteit)</span>
-            <span class="text-lg font-bold text-accentGold mt-1">${bestRatingYear}</span>
-            <p class="text-xs text-stone-300 mt-1">Hoogste gem. rating in één kalenderjaar: <strong class="text-warmCream">${maxAvgRating.toFixed(2)} ⭐</strong></p>
-          </div>
-        `;
-      } else {
-        // Per Jaar Milestones
-        const monthlyBookCount = Array(12).fill(0);
-        const monthlyPageCount = Array(12).fill(0);
-        const authorsReadInYear = new Set();
-        const authorsReadBefore = new Set();
-
-        appState.library.forEach(b => {
-          if ((b.status === 'Finished' || b.status === 'Gelezen') && b.einddatum && b.auteur) {
-            const date = new Date(b.einddatum);
-            const y = date.getFullYear();
-            if (y === selectedYear) {
-              monthlyBookCount[date.getMonth()]++;
-              monthlyPageCount[date.getMonth()] += Number(b.bladzijden || 0);
-              authorsReadInYear.add(b.auteur.trim());
-            } else if (y < selectedYear) {
-              authorsReadBefore.add(b.auteur.trim());
+          // Auteurs tellen
+          if (book.auteur) {
+            const a = String(book.auteur).trim();
+            if (a !== "") {
+              authorCounts[a] = (authorCounts[a] || 0) + 1;
             }
           }
+
+          // Pagina's per maand tellen
+          if (book.einddatum) {
+            const m = safeParseMonth(book.einddatum);
+            monthlyPages[m] += Number(book.bladzijden || 0);
+          }
+
+          // Scatter data vullen
+          if (book.einddatum && book.publicatiejaar) {
+            const rYear = safeParseYear(book.einddatum);
+            const pYear = Number(book.publicatiejaar);
+            if (rYear && pYear && !isNaN(pYear)) {
+              scatterData.push({ x: rYear, y: pYear });
+            }
+          }
+
+          // Series vs Standalone tellen
+          if (book.serienaam && String(book.serienaam).trim() !== "") {
+            seriesCount++;
+          } else {
+            standaloneCount++;
+          }
         });
 
-        const nederlandseMaanden = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
-        let maxMonthBooksIdx = 0;
-        let maxMonthPagesIdx = 0;
-        for (let i = 0; i < 12; i++) {
-          if (monthlyBookCount[i] > monthlyBookCount[maxMonthBooksIdx]) maxMonthBooksIdx = i;
-          if (monthlyPageCount[i] > monthlyPageCount[maxMonthPagesIdx]) maxMonthPagesIdx = i;
-        }
+        // Toon de hoofd-getallen
+        const avgRating = ratingCount > 0 ? (ratingSum / ratingCount).toFixed(1) : "0.0";
+        document.getElementById('wrapTotalBooks').innerText = totalBooks;
+        document.getElementById('wrapTotalPages').innerText = totalPages;
+        document.getElementById('wrapAvgRating').innerText = avgRating;
 
-        // Nieuw ontdekte auteurs berekenen
-        const newAuthors = [...authorsReadInYear].filter(a => !authorsReadBefore.has(a));
+        // 2. Milestone Cards renderen (Foutveilig)
+        const milestoneContainer = document.getElementById('milestoneCardsContainer');
+        milestoneContainer.innerHTML = "";
 
-        milestoneContainer.innerHTML = `
-          <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg">
-            <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Top Maand (Boeken)</span>
-            <h4 class="text-lg font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthBooksIdx]}</h4>
-            <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen: <strong class="text-warmCream">${monthlyBookCount[maxMonthBooksIdx]} boeken</strong></p>
-          </div>
-          <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg">
-            <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Top Maand (Pagina's)</span>
-            <h4 class="text-lg font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthPagesIdx]}</h4>
-            <p class="text-xs text-stone-300 mt-1">Meeste pagina's gelezen: <strong class="text-warmCream">${monthlyPageCount[maxMonthPagesIdx]} pag.</strong></p>
-          </div>
-          <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg sm:col-span-2">
-            <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Nieuw ontdekte auteurs in ${selectedYear}</span>
-            <div class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto">
-              ${newAuthors.length > 0 ? newAuthors.map(a => `<span class="bg-espresso border border-stone-800 text-[10px] px-2.5 py-1 rounded-full text-stone-300 font-medium">${a}</span>`).join('') : '<span class="text-stone-500 text-xs">Geen nieuwe auteurs ontdekt in dit jaar.</span>'}
+        if (isGlobal) {
+          const booksByYear = {};
+          const ratingSumByYear = {};
+          const ratingCountByYear = {};
+
+          appState.library.forEach(b => {
+            const status = String(b.status || '').toLowerCase().trim();
+            if (status === 'gelezen' && b.einddatum) {
+              const y = safeParseYear(b.einddatum);
+              if (y) {
+                booksByYear[y] = (booksByYear[y] || 0) + 1;
+                if (b.rating && !isNaN(b.rating)) {
+                  if (!ratingSumByYear[y]) {
+                    ratingSumByYear[y] = 0;
+                    ratingCountByYear[y] = 0;
+                  }
+                  ratingSumByYear[y] += Number(b.rating);
+                  ratingCountByYear[y]++;
+                }
+              }
+            }
+          });
+
+          let mostBooksYear = "-";
+          let maxBooks = 0;
+          for (const [y, cnt] of Object.entries(booksByYear)) {
+            if (cnt > maxBooks) {
+              maxBooks = cnt;
+              mostBooksYear = y;
+            }
+          }
+
+          let bestRatingYear = "-";
+          let maxAvgRating = 0;
+          for (const [y, sum] of Object.entries(ratingSumByYear)) {
+            const avg = sum / ratingCountByYear[y];
+            if (avg > maxAvgRating) {
+              maxAvgRating = avg;
+              bestRatingYear = y;
+            }
+          }
+
+          milestoneContainer.innerHTML = `
+            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
+              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Volume)</span>
+              <span class="text-lg font-bold text-accentGold mt-1">${mostBooksYear}</span>
+              <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen in één kalenderjaar: <strong class="text-warmCream">${maxBooks} stuks</strong></p>
             </div>
-          </div>
-        `;
-      }
+            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
+              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Kwaliteit)</span>
+              <span class="text-lg font-bold text-accentGold mt-1">${bestRatingYear}</span>
+              <p class="text-xs text-stone-300 mt-1">Hoogste gem. rating in één kalenderjaar: <strong class="text-warmCream">${maxAvgRating.toFixed(2)} ⭐</strong></p>
+            </div>
+          `;
+        } else {
+          const monthlyBookCount = Array(12).fill(0);
+          const monthlyPageCount = Array(12).fill(0);
+          const authorsReadInYear = new Set();
+          const authorsReadBefore = new Set();
 
-      // 3. Extra widgets (Leessnelheid en Voltooide Series)
-      const avgDaysPages = totalPages > 0 ? Math.round(totalPages / (isGlobal ? 365 * 3 : 365)) : 0;
-      document.getElementById('metricReadSpeed').innerText = `${avgDaysPages} pag. / dag`;
+          appState.library.forEach(b => {
+            const status = String(b.status || '').toLowerCase().trim();
+            if (status === 'gelezen' && b.einddatum && b.auteur) {
+              const dateYear = safeParseYear(b.einddatum);
+              const dateMonth = safeParseMonth(b.einddatum);
+              const author = String(b.auteur).trim();
+              
+              if (dateYear === selectedYear) {
+                monthlyBookCount[dateMonth]++;
+                monthlyPageCount[dateMonth] += Number(b.bladzijden || 0);
+                authorsReadInYear.add(author);
+              } else if (dateYear < selectedYear) {
+                authorsReadBefore.add(author);
+              }
+            }
+          });
 
-      // Series voltooid
-      const seriesGroups = {};
-      appState.library.forEach(b => {
-        if (b.serienaam && b.serienaam.trim() !== "") {
-          const name = b.serienaam.trim();
-          if (!seriesGroups[name]) seriesGroups[name] = [];
-          seriesGroups[name].push(b);
+          const nederlandseMaanden = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
+          let maxMonthBooksIdx = 0;
+          let maxMonthPagesIdx = 0;
+          for (let i = 0; i < 12; i++) {
+            if (monthlyBookCount[i] > monthlyBookCount[maxMonthBooksIdx]) maxMonthBooksIdx = i;
+            if (monthlyPageCount[i] > monthlyPageCount[maxMonthPagesIdx]) maxMonthPagesIdx = i;
+          }
+
+          const newAuthors = [...authorsReadInYear].filter(a => !authorsReadBefore.has(a));
+
+          milestoneContainer.innerHTML = `
+            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg">
+              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Top Maand (Boeken)</span>
+              <h4 class="text-lg font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthBooksIdx]}</h4>
+              <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen: <strong class="text-warmCream">${monthlyBookCount[maxMonthBooksIdx]} boeken</strong></p>
+            </div>
+            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg">
+              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Top Maand (Pagina's)</span>
+              <h4 class="text-lg font-bold text-accentGold mt-1">${nederlandseMaanden[maxMonthPagesIdx]}</h4>
+              <p class="text-xs text-stone-300 mt-1">Meeste pagina's gelezen: <strong class="text-warmCream">${monthlyPageCount[maxMonthPagesIdx]} pag.</strong></p>
+            </div>
+            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg sm:col-span-2">
+              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Nieuw ontdekte auteurs in ${selectedYear}</span>
+              <div class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto">
+                ${newAuthors.length > 0 ? newAuthors.map(a => `<span class="bg-espresso border border-stone-800 text-[10px] px-2.5 py-1 rounded-full text-stone-300 font-medium">${a}</span>`).join('') : '<span class="text-stone-500 text-xs">Geen nieuwe auteurs ontdekt in dit jaar.</span>'}
+              </div>
+            </div>
+          `;
         }
-      });
-      let complSeries = 0;
-      for (const [n, books] of Object.entries(seriesGroups)) {
-        if (books.every(b => b.status === 'Finished' || b.status === 'Gelezen')) complSeries++;
-      }
-      document.getElementById('metricCompletedSeries').innerText = `${complSeries} Series`;
 
-      // 4. CHARTS SUITE GENERATOR
-      destroyAllCharts();
+        // Leessnelheid
+        const avgDaysPages = totalPages > 0 ? Math.round(totalPages / (isGlobal ? 365 * 3 : 365)) : 0;
+        document.getElementById('metricReadSpeed').innerText = `${avgDaysPages} pag. / dag`;
 
-      // Chart 1: Pages per month
-      chartInstances['chartPagesPerMonth'] = new Chart(document.getElementById('chartPagesPerMonth'), {
-        type: 'bar',
-        data: {
-          labels: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
-          datasets: [{
-            data: monthlyPages,
-            backgroundColor: '#e68a00',
-            borderRadius: 4
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
-      });
+        // Series voltooid
+        const seriesGroups = {};
+        appState.library.forEach(b => {
+          if (b.serienaam && String(b.serienaam).trim() !== "") {
+            const name = String(b.serienaam).trim();
+            if (!seriesGroups[name]) seriesGroups[name] = [];
+            seriesGroups[name].push(b);
+          }
+        });
+        let complSeries = 0;
+        for (const [n, books] of Object.entries(seriesGroups)) {
+          if (books.every(b => b.status && String(b.status).toLowerCase().trim() === 'gelezen')) complSeries++;
+        }
+        document.getElementById('metricCompletedSeries').innerText = `${complSeries} Series`;
 
-      // Chart 2: Top Genres
-      // Sorteer de genres eerst op het aantal boeken (van hoog naar laag)
-   const sortedGenres = Object.entries(genreCounts)
-     .sort((a, b) => b[1] - a[1])
-     .slice(0, 5);
+        // 3. CHARTS RENDERING
+        destroyAllCharts();
 
-   const genresLabels = sortedGenres.map(x => x[0]);
-   const genresData = sortedGenres.map(x => x[1]);
-      chartInstances['chartTopGenres'] = new Chart(document.getElementById('chartTopGenres'), {
-        type: 'doughnut',
-        data: {
-          labels: genresLabels,
-          datasets: [{
-            data: genresData,
-            backgroundColor: ['#e68a00', '#b45309', '#f5ebe6', '#78350f', '#44403c'],
-            borderWidth: 0
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#a8a29e', font: { size: 9 } } } } }
-      });
+        // Chart 1: Pages per month
+        chartInstances['chartPagesPerMonth'] = new Chart(document.getElementById('chartPagesPerMonth'), {
+          type: 'bar',
+          data: {
+            labels: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+            datasets: [{
+              data: monthlyPages,
+              backgroundColor: '#e68a00',
+              borderRadius: 4
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+        });
 
-      // Chart 3: Books per Author
-      const sortedAuthors = Object.entries(authorCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
-      chartInstances['chartBooksPerAuthor'] = new Chart(document.getElementById('chartBooksPerAuthor'), {
-        type: 'bar',
-        data: {
-          labels: sortedAuthors.map(x => x[0]),
-          datasets: [{
-            data: sortedAuthors.map(x => x[1]),
-            backgroundColor: '#e68a00',
-            borderRadius: 4
-          }]
-        },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
-      });
+        // Chart 2: Top Genres
+        const genresLabels = Object.keys(genreCounts).slice(0, 5);
+        const genresData = genresLabels.map(l => genreCounts[l]);
+        chartInstances['chartTopGenres'] = new Chart(document.getElementById('chartTopGenres'), {
+          type: 'doughnut',
+          data: {
+            labels: genresLabels,
+            datasets: [{
+              data: genresData,
+              backgroundColor: ['#e68a00', '#b45309', '#f5ebe6', '#78350f', '#44403c'],
+              borderWidth: 0
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#a8a29e', font: { size: 9 } } } } }
+        });
 
-      // Chart 4: Rating Distribution
-      chartInstances['chartRatingDistribution'] = new Chart(document.getElementById('chartRatingDistribution'), {
-        type: 'bar',
-        data: {
-          labels: ['1 ★', '2 ★', '3 ★', '4 ★', '5 ★'],
-          datasets: [{
-            data: ratingDistribution,
-            backgroundColor: '#e68a00',
-            borderRadius: 4
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
-      });
+        // Chart 3: Books per Author
+        const sortedAuthors = Object.entries(authorCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+        chartInstances['chartBooksPerAuthor'] = new Chart(document.getElementById('chartBooksPerAuthor'), {
+          type: 'bar',
+          data: {
+            labels: sortedAuthors.map(x => x[0]),
+            datasets: [{
+              data: sortedAuthors.map(x => x[1]),
+              backgroundColor: '#e68a00',
+              borderRadius: 4
+            }]
+          },
+          options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+        });
 
-      // Chart 5: Series vs Standalone
-      chartInstances['chartSeriesVsStandalone'] = new Chart(document.getElementById('chartSeriesVsStandalone'), {
-        type: 'pie',
-        data: {
-          labels: ['Series', 'Standalone'],
-          datasets: [{
-            data: [seriesCount, standaloneCount],
-            backgroundColor: ['#e68a00', '#78350f'],
-            borderWidth: 0
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#a8a29e', font: { size: 9 } } } } }
-      });
+        // Chart 4: Rating Distribution
+        chartInstances['chartRatingDistribution'] = new Chart(document.getElementById('chartRatingDistribution'), {
+          type: 'bar',
+          data: {
+            labels: ['1 ★', '2 ★', '3 ★', '4 ★', '5 ★'],
+            datasets: [{
+              data: ratingDistribution,
+              backgroundColor: '#e68a00',
+              borderRadius: 4
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+        });
 
-     // Chart 6: Score per genre (Nu keurig gesorteerd op populairste genres!)
+        // Chart 5: Series vs Standalone
+        chartInstances['chartSeriesVsStandalone'] = new Chart(document.getElementById('chartSeriesVsStandalone'), {
+          type: 'pie',
+          data: {
+            labels: ['Series', 'Standalone'],
+            datasets: [{
+              data: [seriesCount, standaloneCount],
+              backgroundColor: ['#e68a00', '#78350f'],
+              borderWidth: 0
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#a8a29e', font: { size: 9 } } } } }
+        });
+
+        // Chart 6: Score per genre (Nu keurig gesorteerd op populairste genres!)
         const avgGenreRatings = [];
         const genreLabelsForRatings = genresLabels; // Neemt automatisch de gesorteerde top 5 genres over!
         genreLabelsForRatings.forEach(g => {
@@ -1146,41 +1574,53 @@ function renderCurrentlyReading() {
           avgGenreRatings.push(item.count > 0 ? (item.sum / item.count).toFixed(2) : 0);
         });
 
-      chartInstances['chartRatingPerGenre'] = new Chart(document.getElementById('chartRatingPerGenre'), {
-        type: 'bar',
-        data: {
-          labels: genreLabelsForRatings,
-          datasets: [{
-            data: avgGenreRatings,
-            backgroundColor: '#e68a00',
-            borderRadius: 4
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { max: 5, ticks: { color: '#a8a29e', font: { size: 9 } } } } }
-      });
+        chartInstances['chartRatingPerGenre'] = new Chart(document.getElementById('chartRatingPerGenre'), {
+          type: 'bar',
+          data: {
+            labels: genreLabelsForRatings,
+            datasets: [{
+              data: avgGenreRatings,
+              backgroundColor: '#e68a00',
+              borderRadius: 4
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a8a29e', font: { size: 9 } } }, y: { max: 5, ticks: { color: '#a8a29e', font: { size: 9 } } } } }
+        });
 
-      // Chart 7: Scatter Publication year vs Read Year
-      chartInstances['chartPublicationYearScatter'] = new Chart(document.getElementById('chartPublicationYearScatter'), {
-        type: 'scatter',
-        data: {
-          datasets: [{
-            label: 'Boeken',
-            data: scatterData,
-            backgroundColor: '#e68a00'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jaar Gelezen', color: '#a8a29e' }, ticks: { color: '#a8a29e', stepSize: 1, font: { size: 9 } } },
-            y: { title: { display: true, text: 'Origineel Publicatiejaar', color: '#a8a29e' }, ticks: { color: '#a8a29e', font: { size: 9 } } }
+        // Chart 7: Scatter plot
+        chartInstances['chartPublicationYearScatter'] = new Chart(document.getElementById('chartPublicationYearScatter'), {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Boeken',
+              data: scatterData,
+              backgroundColor: '#e68a00'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jaar Gelezen', color: '#a8a29e' }, ticks: { color: '#a8a29e', stepSize: 1, font: { size: 9 } } },
+              y: { title: { display: true, text: 'Origineel Publicatiejaar', color: '#a8a29e' }, ticks: { color: '#a8a29e', font: { size: 9 } } }
+            }
           }
-        }
-      });
+        });
+
+      } catch (err) {
+        // Foutopvang: Mocht er een vreemde waarde in de spreadsheet staan, toon dit dan netjes
+        console.error("Fout bij laden statistieken:", err);
+        document.getElementById('milestoneCardsContainer').innerHTML = `
+          <div class="col-span-2 bg-amber-950/20 border border-amber-900/50 p-4 rounded-xl text-center text-xs text-amber-500">
+            Fout bij het laden van de grafieken: ${err.message}.<br>
+            Controleer of de kolommen 'Einddatum' en 'Bladzijden' in uw spreadsheet het juiste formaat hebben.
+          </div>
+        `;
+      }
     }
 
+    // --- Hulpfunctie om grafieken veilig te vernietigen ---
     function destroyAllCharts() {
       for (const [key, instance] of Object.entries(chartInstances)) {
         if (instance) {
@@ -1190,22 +1630,7 @@ function renderCurrentlyReading() {
       chartInstances = {};
     }
 
-    // --- INTERACTIVE MODAL ACTIONS ---
-    function openCurrentlyReadingModal(book) {
-      document.getElementById('modalBackdrop').classList.remove('hidden');
-      document.getElementById('currentlyReadingModal').classList.remove('hidden');
-      
-      document.getElementById('logBookTitle').value = book.titel;
-      document.getElementById('logBookAuthor').value = book.auteur;
-      document.getElementById('logStartDate').value = book.begindatum || '';
-      document.getElementById('logEndDate').value = book.einddatum || '';
-      document.getElementById('logStatus').value = book.status || 'Reading';
-      document.getElementById('logReview').value = book.review || '';
-      
-      const rating = Number(book.rating || 0);
-      setInteractiveRatingStars(rating);
-    }
-
+    // --- Interactive rating stars generator ---
     function setInteractiveRatingStars(rating) {
       document.getElementById('logRatingVal').value = rating;
       const container = document.getElementById('starContainer');
@@ -1220,56 +1645,7 @@ function renderCurrentlyReading() {
       }
     }
 
-    function handleLogUpdateSubmit(e) {
-  e.preventDefault();
-  const btn = document.getElementById('logSubmitBtn');
-  btn.disabled = true;
-  btn.innerText = "Bezig met verwerken...";
-
-  // Haal het originele boek op om geen andere kolommen te overschrijven
-  const original = appState.library.find(b => 
-    b.titel.toLowerCase().trim() === document.getElementById('logBookTitle').value.toLowerCase().trim() &&
-    b.auteur.toLowerCase().trim() === document.getElementById('logBookAuthor').value.toLowerCase().trim()
-  ) || {};
-
-  const requestPayload = {
-    token: API_TOKEN,
-    titel: document.getElementById('logBookTitle').value,
-    auteur: document.getElementById('logBookAuthor').value,
-    status: document.getElementById('logStatus').value, // Stuurt 'Bezig' of 'Gelezen' naar de sheet
-    rating: document.getElementById('logRatingVal').value,
-    begindatum: document.getElementById('logStartDate').value,
-    einddatum: document.getElementById('logEndDate').value,
-    review: document.getElementById('logReview').value,
-    categorie: original.categorie || '',
-    genre: original.genre || '',
-    publicatiejaar: original.publicatiejaar || '',
-    bladzijden: original.bladzijden || '',
-    isbn: original.isbn || '',
-    serienaam: original.serienaam || '',
-    serie_deel: original.serie_deel || '',
-    cover_url: original.cover_url || '',
-    tbr_lijst: original.tbr_lijst || ''
-  };
-
-  fetch(GAS_WEBAPP_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestPayload)
-  })
-  .then(() => {
-    alert("Boek succesvol bijgewerkt!");
-    closeModal();
-    fetchLibraryData();
-  })
-  .catch(err => alert("Fout bij bijwerken: " + err.message))
-  .finally(() => {
-    btn.disabled = false;
-    btn.innerText = "Logboek Opslaan";
-  });
-}
-
+    // --- Open Challenge Modal ---
     function openChallengeModal() {
       document.getElementById('modalBackdrop').classList.remove('hidden');
       document.getElementById('challengeGridModal').classList.remove('hidden');
@@ -1287,7 +1663,7 @@ function renderCurrentlyReading() {
         if (slotTitle) {
           // Check if read
           const readBook = appState.library.find(b => 
-            (b.status === 'Finished' || b.status === 'Gelezen') && 
+            b.status && (b.status.toLowerCase().trim() === 'gelezen') && 
             b.titel.toLowerCase().trim() === slotTitle.toLowerCase().trim()
           );
 
@@ -1331,10 +1707,14 @@ function renderCurrentlyReading() {
       document.getElementById('nestedReviewModal').classList.add('hidden');
     }
 
+    // Algemene sluitfunctie voor alle modals
     function closeModal() {
       document.getElementById('modalBackdrop').classList.add('hidden');
       document.getElementById('currentlyReadingModal').classList.add('hidden');
       document.getElementById('challengeGridModal').classList.add('hidden');
+      document.getElementById('tbrListModal').classList.add('hidden');
+      document.getElementById('tbrActionModal').classList.add('hidden');
+      document.getElementById('centralReviewModal').classList.add('hidden');
       closeNestedModal();
     }
 
@@ -1433,7 +1813,7 @@ function renderCurrentlyReading() {
         })
         .catch(err => {
           console.error(err);
-          showIsbnFeedback("Fout bij ophalen. Probeer het handmatig.", "text-red-500");
+          showIsbnFeedback("Fout bij ophalen. Het is geprobeerd via Open Library.", "text-red-500");
           if (searchBtn) {
             searchBtn.disabled = false;
             searchBtn.innerText = "Zoek Boek";
