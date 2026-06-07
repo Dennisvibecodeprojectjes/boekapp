@@ -721,7 +721,7 @@
       container.onclick = () => openCurrentlyReadingModal(activeBook);
     }
 
-    // --- TBR-Lijst Modals Openen & Genereren ---
+  // --- TBR-Lijst Modals Openen & Genereren (Lichte modus contrast-fix) ---
     function openTbrListModal() {
       document.getElementById('modalBackdrop').classList.remove('hidden');
       document.getElementById('tbrListModal').classList.remove('hidden');
@@ -740,20 +740,23 @@
       tbrBooks.forEach(book => {
         const cover = book.cover_url || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop";
         const card = document.createElement('div');
-        card.className = "bg-espresso border border-stone-800 p-2 rounded-xl flex items-center space-x-3 hover:border-accentGold/40 transition-all cursor-pointer shadow-md";
+        
+        // Aangepast: border-stone-200 in plaats van de harde donkere rand, voor een rustig en strak effect
+        card.className = "bg-espresso border border-stone-200 p-2 rounded-xl flex items-center space-x-3 hover:border-accentGold transition-all cursor-pointer shadow-md";
+        
+        // Aangepast: Auteurtekst naar text-stone-600 (goed leesbaar donkergrijs)
         card.innerHTML = `
-          <img src="${cover}" class="w-10 h-14 object-cover rounded border border-stone-800 flex-shrink-0" alt="Cover">
+          <img src="${cover}" class="w-10 h-14 object-cover rounded border border-stone-200 flex-shrink-0" alt="Cover">
           <div class="min-w-0 flex-1">
             <h4 class="font-bold text-xs text-warmCream truncate" title="${book.titel}">${book.titel}</h4>
-            <p class="text-[10px] text-stone-400 truncate">${book.auteur}</p>
-            <p class="text-[9px] text-accentGold truncate mt-0.5">${book.tbr_lijst || 'Nog niet ingepland'}</p>
+            <p class="text-[10px] text-stone-600 font-semibold truncate mt-0.5">${book.auteur}</p>
+            <p class="text-[9px] text-accentGold font-bold truncate mt-0.5">${book.tbr_lijst || 'Nog niet ingepland'}</p>
           </div>
         `;
         card.onclick = () => openTbrActionModal(book);
         grid.appendChild(card);
       });
     }
-
     function openTbrActionModal(book) {
       selectedTbrBook = book;
       document.getElementById('tbrActionModal').classList.remove('hidden');
