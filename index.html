@@ -10,23 +10,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-tailwind.config = {
+  tailwind.config = {
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // De donkere modus (als je die gebruikt): zacht espresso-zwart, niet te hard
-        espresso: '#1a1614',    
-        cafeCard: '#26201d',    
+        // We maken espresso nu LICHT (voor de hoofdachgtergrond van de body)
+        espresso: '#fdfbf7',   // De ultieme lichte havermelk/chai achtergrond
         
-        // JOUW HERO: De frisse abrikoos-accentkleur die overal uitspringt
-        accentGold: '#ff8243',  // Fris, sappig abrikoos/oranje voor buttons en actieve states
+        // We maken de kaarten een zachte, warme zandkleur
+        cafeCard: '#f5ebe6',   
         
-        // JOUW BASIS: Superfris, modern en licht (light mode achtergrond)
-        warmCream: '#fdfbf7',   // De ultieme 'havermelk/chai' achtergrond: heel clean maar warm
+        // De frisse abrikoos-accentkleur blijft prachtig overal uitspringen
+        accentGold: '#ff8243',  
         
-        // De ondersteunende tint voor subtiele randen, secondary buttons of text-muted
-        woodBrown: '#8e7568'    // Geen zwaar donkerbruin meer, maar een zacht, modern taupe/bruin
+        // We maken warmCream nu DONKER (zodat alle standaardtekst donker espresso wordt)
+        warmCream: '#1a1614',   
+        
+        // Subtiel modern taupe voor randjes en details
+        woodBrown: '#8e7568'    
       }
     }
   }
