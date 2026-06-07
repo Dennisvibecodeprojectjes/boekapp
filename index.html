@@ -10,20 +10,27 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            espresso: '#1a1311', // Donkere luxe achtergrond
-            cafeCard: '#261c19',  // Iets lichtere lounge containers
-            accentGold: '#e68a00',// Gloeiend goud/oranje
-            warmCream: '#f5ebe6', // Zacht leesbaar perkament wit
-            woodBrown: '#78350f'  // Kastplank bruin
-          }
-        }
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        // De donkere modus (als je die gebruikt): zacht espresso-zwart, niet te hard
+        espresso: '#1a1614',    
+        cafeCard: '#26201d',    
+        
+        // JOUW HERO: De frisse abrikoos-accentkleur die overal uitspringt
+        accentGold: '#ff8243',  // Fris, sappig abrikoos/oranje voor buttons en actieve states
+        
+        // JOUW BASIS: Superfris, modern en licht (light mode achtergrond)
+        warmCream: '#fdfbf7',   // De ultieme 'havermelk/chai' achtergrond: heel clean maar warm
+        
+        // De ondersteunende tint voor subtiele randen, secondary buttons of text-muted
+        woodBrown: '#8e7568'    // Geen zwaar donkerbruin meer, maar een zacht, modern taupe/bruin
       }
     }
+  }
+}
   </script>
   <style>
     /* Custom scrollbar hides for horizontal swiping */
@@ -35,7 +42,8 @@
       scrollbar-width: none;
     }
     .wood-shelf {
-      background: linear-gradient(0deg, #321303 0%, #682e0d 100%);
+      /* Aangepast naar uw nieuwe, zachte taupe-kleur #8e7568 */
+      background: linear-gradient(0deg, #44342d 0%, #8e7568 100%);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.7), inset 0 2px 4px 0 rgba(255, 255, 255, 0.05);
     }
     .book-3d {
@@ -1500,7 +1508,7 @@
             labels: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
             datasets: [{
               data: monthlyPages,
-              backgroundColor: '#e68a00',
+              backgroundColor: '#ff8243',
               borderRadius: 4
             }]
           },
@@ -1520,7 +1528,7 @@
             labels: genresLabels,
             datasets: [{
               data: genresData,
-              backgroundColor: ['#e68a00', '#b45309', '#f5ebe6', '#78350f', '#44403c'],
+              backgroundColor: ['#ff8243', '#8e7568', '#fdfbf7', '#44342d', '#26201d'],
               borderWidth: 0
             }]
           },
@@ -1535,7 +1543,7 @@
             labels: sortedAuthors.map(x => x[0]),
             datasets: [{
               data: sortedAuthors.map(x => x[1]),
-              backgroundColor: '#e68a00',
+              backgroundColor: '#ff8243',
               borderRadius: 4
             }]
           },
@@ -1549,7 +1557,7 @@
             labels: ['1 ★', '2 ★', '3 ★', '4 ★', '5 ★'],
             datasets: [{
               data: ratingDistribution,
-              backgroundColor: '#e68a00',
+              backgroundColor: '#ff8243',
               borderRadius: 4
             }]
           },
@@ -1563,7 +1571,7 @@
             labels: ['Series', 'Standalone'],
             datasets: [{
               data: [seriesCount, standaloneCount],
-              backgroundColor: ['#e68a00', '#78350f'],
+              backgroundColor: ['#ff8243', '#8e7568'],
               borderWidth: 0
             }]
           },
@@ -1584,7 +1592,7 @@
             labels: genreLabelsForRatings,
             datasets: [{
               data: avgGenreRatings,
-              backgroundColor: '#e68a00',
+              backgroundColor: '#ff8243',
               borderRadius: 4
             }]
           },
@@ -1598,7 +1606,7 @@
             datasets: [{
               label: 'Boeken',
               data: scatterData,
-              backgroundColor: '#e68a00'
+              backgroundColor: '#ff8243'
             }]
           },
           options: {
