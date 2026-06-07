@@ -461,12 +461,13 @@
       </div>
     </div>
 
-    <!-- 4. TBR List Modal -->
+    <!-- 4. TBR List Modal (Hersteld voor maximaal contrast) -->
     <div id="tbrListModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4 text-warmCream">
       <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <div>
-          <h3 class="text-lg font-bold text-accentGold">Mijn TBR-Lijst</h3>
-          <p class="text-xs text-stone-500">Klik op een boek om het te starten of in te plannen</p>
+          <!-- Titel naar warmCream (donker espresso) en subtitel naar stone-600 gezet voor perfecte leesbaarheid -->
+          <h3 class="text-lg font-bold text-warmCream">Mijn TBR-Lijst</h3>
+          <p class="text-xs text-stone-600 font-medium">Klik op een boek om het te starten of in te plannen</p>
         </div>
         <button onclick="closeModal()" class="text-stone-500 hover:text-warmCream text-2xl">&times;</button>
       </div>
@@ -474,7 +475,7 @@
         <!-- Dynamically populated with TBR books -->
       </div>
     </div>
-
+    
     <!-- 5. TBR Action Detail Modal -->
     <div id="tbrActionModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4 relative z-50 text-warmCream">
       <div class="flex justify-between items-center border-b border-stone-200 pb-3">
