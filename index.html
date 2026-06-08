@@ -10,20 +10,29 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            espresso: '#fdfbf7',   // De ultieme lichte havermelk/chai achtergrond
-            cafeCard: '#f5ebe6',   // Warme zachte zandkleur voor de kaarten
-            accentGold: '#ff8243', // De frisse abrikoos-kleur voor de knoppen
-            warmCream: '#1a1614',  // De donkere espressokleur voor de hoofdtekst
-            woodBrown: '#8e7568'   // Zacht taupe voor de randjes en details
-          }
-        }
+  tailwind.config f= {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        // We maken espresso nu LICHT (voor de hoofdachgtergrond van de body)
+        espresso: '#fdfbf7',   // De ultieme lichte havermelk/chai achtergrond
+        
+        // We maken de kaarten een zachte, warme zandkleur
+        cafeCard: '#f5ebe6',   
+        
+        // De frisse abrikoos-accentkleur blijft prachtig overal uitspringen
+        accentGold: '#ff8243',  
+        
+        // We maken warmCream nu DONKER (zodat alle standaardtekst donker espresso wordt)
+        warmCream: '#1a1614',   
+        
+        // Subtiel modern taupe voor randjes en details
+        woodBrown: '#8e7568'    
       }
     }
+  }
+}
   </script>
   <style>
     /* Custom scrollbar hides for horizontal swiping */
@@ -35,6 +44,7 @@
       scrollbar-width: none;
     }
     .wood-shelf {
+      /* Aangepast naar uw nieuwe, zachte taupe-kleur #8e7568 */
       background: linear-gradient(0deg, #44342d 0%, #8e7568 100%);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.7), inset 0 2px 4px 0 rgba(255, 255, 255, 0.05);
     }
@@ -154,7 +164,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: BOOK WRAPPED (DATAVISUALISATIE - EDIT VOOR HOOG CONTRAST & UPGRADES) -->
+<!-- TAB 3: BOOK WRAPPED (DATAVISUALISATIE - EDIT VOOR HOOG CONTRAST) -->
     <div id="tab-wrapped" class="tab-content hidden space-y-8 animate-fade-in">
       
       <!-- Top Nav Toggle -->
@@ -178,7 +188,7 @@
           <span class="text-2xl font-bold text-accentGold" id="wrapTotalPages">0</span>
           <p class="text-[9px] uppercase tracking-wider text-stone-600 font-bold mt-1">Gelezen pagina's</p>
         </div>
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl text-center shadow-lg">
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl text-center shadow-md">
           <span class="text-2xl font-bold text-accentGold" id="wrapAvgRating">0.0</span>
           <p class="text-[9px] uppercase tracking-wider text-stone-600 font-bold mt-1">Gem. Beoordeling</p>
         </div>
@@ -189,100 +199,45 @@
         <!-- Dyn. generated Cards based on view -->
       </div>
 
-      <!-- SUB-SECTION A: ALGEMENE STATISTIEKEN GRID (GLOBAL ONLY) -->
-      <div id="wrappedGlobalOnly" class="grid gap-6 sm:grid-cols-2 hidden animate-fade-in">
+      <!-- The Charts Suite -->
+      <div class="grid gap-6 sm:grid-cols-2">
         
-        <!-- Books Per Year Line Chart (NIEUW) -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Boekenaantal per jaar</h3>
-          <div class="h-48 relative"><canvas id="chartBooksPerYear"></canvas></div>
-        </div>
-
-        <!-- Best Rated Authors List (NIEUW) -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-3 flex flex-col justify-between">
-          <div>
-            <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600 mb-1">Best beoordeelde auteurs</h3>
-            <p class="text-[9px] text-stone-500">Auteurs met &gt; 2 boeken, gerangschikt op score</p>
-          </div>
-          <div id="bestRatedAuthorsList" class="space-y-2 flex-1 mt-2">
-            <!-- Dynamically populated list -->
-          </div>
-        </div>
-
-        <!-- Book Thickness Histogram (NIEUW) -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Boekdikte Distributie</h3>
-          <div class="h-48 relative"><canvas id="chartBookThickness"></canvas></div>
-        </div>
-
-        <!-- Top Genres -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Top Genres</h3>
-          <div class="h-48 relative"><canvas id="chartTopGenres"></canvas></div>
-        </div>
-
-        <!-- Books Per Author -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Aantal Boeken per Auteur</h3>
-          <div class="h-48 relative"><canvas id="chartBooksPerAuthor"></canvas></div>
-        </div>
-
-        <!-- Series vs Standalone -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Serie vs Standalone</h3>
-          <div class="h-48 relative"><canvas id="chartSeriesVsStandalone"></canvas></div>
-        </div>
-
-        <!-- Publication Year Scatter -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2 sm:col-span-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Leesjaar vs Publicatiejaar</h3>
-          <div class="h-64 relative"><canvas id="chartPublicationYearScatter"></canvas></div>
-        </div>
-
-      </div>
-
-      <!-- SUB-SECTION B: JAARLIJKSE STATISTIEKEN GRID (YEARLY ONLY) -->
-      <div id="wrappedYearlyOnly" class="grid gap-6 sm:grid-cols-2 hidden animate-fade-in">
-        
-        <!-- Pages Per Month -->
         <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
           <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Pagina's per Maand</h3>
           <div class="h-48 relative"><canvas id="chartPagesPerMonth"></canvas></div>
         </div>
 
-        <!-- Books Per Month (NIEUW) -->
         <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
-          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Gelezen boeken per Maand</h3>
-          <div class="h-48 relative"><canvas id="chartBooksPerMonth"></canvas></div>
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Top Genres</h3>
+          <div class="h-48 relative"><canvas id="chartTopGenres"></canvas></div>
         </div>
 
-        <!-- Rating Distribution -->
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Aantal Boeken per Auteur</h3>
+          <div class="h-48 relative"><canvas id="chartBooksPerAuthor"></canvas></div>
+        </div>
+
         <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
           <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Rating Distributie</h3>
           <div class="h-48 relative"><canvas id="chartRatingDistribution"></canvas></div>
         </div>
 
-        <!-- Score per Genre -->
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Serie vs Standalone</h3>
+          <div class="h-48 relative"><canvas id="chartSeriesVsStandalone"></canvas></div>
+        </div>
+
         <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2">
           <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Score per Genre</h3>
           <div class="h-48 relative"><canvas id="chartRatingPerGenre"></canvas></div>
         </div>
 
-        <!-- Top 5 Longest Books with Cover and HTML Progress Bars (NIEUW) -->
-        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-3 sm:col-span-2">
-          <div>
-            <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Top 5 Langste boeken</h3>
-            <p class="text-[9px] text-stone-500">De boeken met de meeste bladzijden afgerond in het geselecteerde jaar</p>
-          </div>
-          <div id="longestBooksList" class="space-y-3">
-            <!-- Dynamically populated with covers and horizontal CSS progress bars -->
-          </div>
+        <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md space-y-2 sm:col-span-2">
+          <h3 class="text-xs font-bold tracking-wider uppercase text-stone-600">Leesjaar vs Publicatiejaar</h3>
+          <div class="h-64 relative"><canvas id="chartPublicationYearScatter"></canvas></div>
         </div>
 
-      </div>
-
-      <!-- Shared widgets -->
-      <div class="grid gap-6 sm:grid-cols-2">
+        <!-- Metric widgets -->
         <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex items-center justify-between">
           <div>
             <h4 class="text-xs font-bold uppercase text-stone-600">Leessnelheid</h4>
@@ -298,10 +253,10 @@
           </div>
           <span class="text-3xl">📚</span>
         </div>
+
       </div>
 
     </div>
-
     <!-- TAB 4: NIEUW BOEK -->
     <div id="tab-newbook" class="tab-content hidden space-y-6">
       
@@ -369,7 +324,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold mb-1 text-stone-400">TBR Lijst</label>
-            <input type="text" id="formTbrLijst" placeholder="Bijv. Jaarlijst, mei" class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
+            <input type="text" id="formTbrLijst" placeholder="Bijv. Jaarlijst, juli" class="w-full bg-espresso border border-stone-800 rounded-lg p-2.5 text-warmCream focus:outline-none focus:border-accentGold">
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1 text-stone-400">Publicatiejaar</label>
@@ -414,9 +369,9 @@
 
   </main>
 
-  <!-- MODALS SYSTEM (CHALLENGE / CURRENTLY READING / NESTED REVIEWS / TBR LIST / CENTRAL REVIEW) -->
+ <!-- MODALS SYSTEM (CHALLENGE / CURRENTLY READING / NESTED REVIEWS / TBR LIST / CENTRAL REVIEW - LICHT GEOPTIMALISEERD) -->
   
-  <!-- Interactive Modals backdrop -->
+  <!-- Interactive Modals backdrop: Veranderd van bg-black/80 naar een chique lichte havermelk frosted-glass sluier! -->
   <div id="modalBackdrop" class="hidden fixed inset-0 z-50 bg-espresso/50 backdrop-blur-md flex items-center justify-center p-4">
     
     <!-- 1. Currently Reading / Log Update Modal -->
@@ -489,7 +444,7 @@
       </div>
     </div>
 
-    <!-- 3. Nested popup for challenge reviews (Met hoog contrast) -->
+    <!-- 3. Nested popup for challenge reviews (Contrast hersteld voor lichte modus) -->
     <div id="nestedReviewModal" class="hidden bg-espresso border border-stone-200 w-full max-w-sm rounded-xl shadow-2xl p-5 space-y-3 relative z-50">
       <div class="flex justify-between items-center border-b border-stone-200 pb-2">
         <h4 id="nestedTitle" class="font-bold text-accentGold text-sm">Review details</h4>
@@ -506,10 +461,11 @@
       </div>
     </div>
 
-    <!-- 4. TBR List Modal -->
+    <!-- 4. TBR List Modal (Hersteld voor maximaal contrast) -->
     <div id="tbrListModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-4 text-warmCream">
       <div class="flex justify-between items-center border-b border-stone-200 pb-3">
         <div>
+          <!-- Titel naar warmCream (donker espresso) en subtitel naar stone-600 gezet voor perfecte leesbaarheid -->
           <h3 class="text-lg font-bold text-warmCream">Mijn TBR-Lijst</h3>
           <p class="text-xs text-stone-600 font-medium">Klik op een boek om het te starten of in te plannen</p>
         </div>
@@ -519,7 +475,7 @@
         <!-- Dynamically populated with TBR books -->
       </div>
     </div>
-
+    
     <!-- 5. TBR Action Detail Modal -->
     <div id="tbrActionModal" class="hidden bg-cafeCard border border-stone-300/80 w-full max-w-sm rounded-2xl shadow-2xl p-6 space-y-4 relative z-50 text-warmCream">
       <div class="flex justify-between items-center border-b border-stone-200 pb-3">
@@ -549,7 +505,7 @@
             <select id="tbrActionMonthSelect" class="flex-1 bg-espresso border border-stone-300/80 rounded-lg p-2 text-xs text-warmCream focus:outline-none focus:border-accentGold">
               <option value="Jaarlijst">Jaarlijst (Geen specifieke maand)</option>
               <option value="januari">januari</option>
-              <option value="februari">februari</option>
+              <option value="februari">Februari</option>
               <option value="maart">maart</option>
               <option value="april">april</option>
               <option value="mei">mei</option>
@@ -559,7 +515,7 @@
               <option value="september">september</option>
               <option value="oktober">oktober</option>
               <option value="november">november</option>
-              <option value="december">december</option>
+              <option value="december">demceber</option>
               <option value="Jaarlijst, januari">Jaarlijst, januari</option>
               <option value="Jaarlijst, februari">Jaarlijst, februari</option>
               <option value="Jaarlijst, maart">Jaarlijst, maart</option>
@@ -619,7 +575,7 @@
       <span class="text-xl">➕</span><span class="text-[10px] font-bold">Nieuw Boek</span>
     </button>
   </nav>
-
+  
   <!-- JS CONTROLLERS & ENGINE -->
   <script>
     // --- APP STATE & KEYS ---
@@ -778,7 +734,7 @@
       container.onclick = () => openCurrentlyReadingModal(activeBook);
     }
 
-    // --- TBR-Lijst Modals Openen & Genereren ---
+  // --- TBR-Lijst Modals Openen & Genereren (Lichte modus contrast-fix) ---
     function openTbrListModal() {
       document.getElementById('modalBackdrop').classList.remove('hidden');
       document.getElementById('tbrListModal').classList.remove('hidden');
@@ -814,7 +770,6 @@
         grid.appendChild(card);
       });
     }
-
     function openTbrActionModal(book) {
       selectedTbrBook = book;
       document.getElementById('tbrActionModal').classList.remove('hidden');
@@ -1116,7 +1071,7 @@
         "januari", "februari", "maart", "april", "mei", "juni", 
         "juli", "augustus", "september", "oktober", "november", "december"
       ];
-      const huidigeMaand = nederndseMaanden[today.getMonth()];
+      const huidigeMaand = nederlandseMaanden[today.getMonth()];
 
       let tbrBooks = appState.library.filter(book => {
         if (!book.tbr_lijst) return false;
@@ -1343,7 +1298,7 @@
 
 
     // =========================================================================
-    // HERSTELDE & FOUTBESTENDIGE STATISTIEKEN ENGINE (BOOK WRAPPED)
+    // HOOG-CONTRAST STATISTIEKEN ENGINE (BOOK WRAPPED LIGHT MODE)
     // =========================================================================
 
     function renderWrappedStats() {
@@ -1377,12 +1332,10 @@
         let standaloneCount = 0;
 
         finishedBooks.forEach(book => {
-          // Pagina's optellen
           if (book.bladzijden) {
             totalPages += Number(book.bladzijden);
           }
           
-          // Beoordelingen verwerken
           if (book.rating && !isNaN(book.rating)) {
             const score = Number(book.rating);
             ratingSum += score;
@@ -1391,7 +1344,6 @@
             ratingDistribution[idx]++;
           }
 
-          // Genres tellen
           if (book.genre) {
             const g = String(book.genre).trim();
             if (g !== "") {
@@ -1404,7 +1356,6 @@
             }
           }
 
-          // Auteurs tellen
           if (book.auteur) {
             const a = String(book.auteur).trim();
             if (a !== "") {
@@ -1412,13 +1363,11 @@
             }
           }
 
-          // Pagina's per maand tellen
           if (book.einddatum) {
             const m = safeParseMonth(book.einddatum);
             monthlyPages[m] += Number(book.bladzijden || 0);
           }
 
-          // Scatter data vullen
           if (book.einddatum && book.publicatiejaar) {
             const rYear = safeParseYear(book.einddatum);
             const pYear = Number(book.publicatiejaar);
@@ -1427,7 +1376,6 @@
             }
           }
 
-          // Series vs Standalone tellen
           if (book.serienaam && String(book.serienaam).trim() !== "") {
             seriesCount++;
           } else {
@@ -1441,7 +1389,7 @@
         document.getElementById('wrapTotalPages').innerText = totalPages;
         document.getElementById('wrapAvgRating').innerText = avgRating;
 
-        // 2. Milestone Cards renderen (Foutveilig)
+        // 2. Milestone Cards renderen (Contrast aangepast voor lichte modus)
         const milestoneContainer = document.getElementById('milestoneCardsContainer');
         milestoneContainer.innerHTML = "";
 
@@ -1488,15 +1436,15 @@
           }
 
           milestoneContainer.innerHTML = `
-            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-lg flex flex-col justify-center">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Volume)</span>
-              <span class="text-lg font-bold text-accentGold mt-1">${mostBooksYear}</span>
-              <p class="text-xs text-stone-300 mt-1">Meeste boeken gelezen in één kalenderjaar: <strong class="text-warmCream">${maxBooks} stuks</strong></p>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex flex-col justify-center">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Goudjaar (Volume)</span>
+              <span class="text-xl font-bold text-accentGold mt-1">${mostBooksYear}</span>
+              <p class="text-xs text-warmCream mt-1">Meeste boeken gelezen in één kalenderjaar: <strong class="text-warmCream">${maxBooks} stuks</strong></p>
             </div>
-            <div class="bg-cafeCard border border-stone-800 p-4 rounded-xl shadow-lg flex flex-col justify-center">
-              <span class="text-xs uppercase tracking-wider text-stone-400 font-semibold">Goudjaar (Kwaliteit)</span>
-              <span class="text-lg font-bold text-accentGold mt-1">${bestRatingYear}</span>
-              <p class="text-xs text-stone-300 mt-1">Hoogste gem. rating in één kalenderjaar: <strong class="text-warmCream">${maxAvgRating.toFixed(2)} ⭐</strong></p>
+            <div class="bg-cafeCard border border-stone-200 p-4 rounded-xl shadow-md flex flex-col justify-center">
+              <span class="text-xs uppercase tracking-wider text-stone-500 font-bold">Goudjaar (Kwaliteit)</span>
+              <span class="text-xl font-bold text-accentGold mt-1">${bestRatingYear}</span>
+              <p class="text-xs text-warmCream mt-1">Hoogste gem. rating in één kalenderjaar: <strong class="text-warmCream">${maxAvgRating.toFixed(2)} ⭐</strong></p>
             </div>
           `;
         } else {
@@ -1703,7 +1651,7 @@
 
         // Chart 6: Score per genre
         const avgGenreRatings = [];
-        const genreLabelsForRatings = sortedLabels; // Neemt automatisch de gesorteerde top 5 genres over!
+        const genreLabelsForRatings = sortedLabels; // Synchroniseert met de gesorteerde topgenres
         genreLabelsForRatings.forEach(g => {
           const item = genreRatings[g] || { sum: 0, count: 0 };
           avgGenreRatings.push(item.count > 0 ? (item.sum / item.count).toFixed(2) : 0);
@@ -1762,7 +1710,6 @@
         });
 
       } catch (err) {
-        // Foutopvang: Mocht er een vreemde waarde in de spreadsheet staan, toon dit dan netjes
         console.error("Fout bij laden statistieken:", err);
         document.getElementById('milestoneCardsContainer').innerHTML = `
           <div class="col-span-2 bg-amber-950/20 border border-amber-900/50 p-4 rounded-xl text-center text-xs text-amber-500">
@@ -1772,7 +1719,6 @@
         `;
       }
     }
-
     // --- Hulpfunctie om grafieken veilig te vernietigen ---
     function destroyAllCharts() {
       for (const [key, instance] of Object.entries(chartInstances)) {
@@ -1835,7 +1781,7 @@
           } else {
             // Unread challenge book
             card.innerHTML = `
-              <span class="text-[9px] font-bold text-stone-700 line-clamp-3">${slotTitle}</span>
+              <span class="text-[9px] font-semibold text-stone-700 line-clamp-3">${slotTitle}</span>
               <span class="text-[10px] mt-2 text-stone-500">⏳</span>
             `;
           }
